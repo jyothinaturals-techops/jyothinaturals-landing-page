@@ -1,0 +1,137 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Playfair+Display:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Outfit:wght@100;200;300;400;500;600;700&family=Mrs+Saint+Delafield&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-heritage-green: #1B3022;
+  --color-heritage-dark: #122117;
+  --color-rich-copper: #A67C52;
+  --color-copper-light: #C9A683;
+  --color-champagne: #F2E8DA;
+  --color-cream-base: #FDFBF7;
+  --color-ink-deep: #1A1A1A;
+  --color-gold-muted: #D4AF37;
+  
+  --font-display: "Playfair Display", serif;
+  --font-serif: "Cormorant Garamond", serif;
+  --font-sans: "Outfit", sans-serif;
+  --font-script: "Mrs Saint Delafield", cursive;
+
+  --animate-fade-up: fade-up 1s ease-out forwards;
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+body {
+  @apply bg-cream-base text-ink-deep font-sans antialiased overflow-x-hidden selection:bg-rich-copper/20;
+}
+
+h1, h2, h3, h4 {
+  @apply font-display tracking-tight text-heritage-green;
+}
+
+.serif-italic {
+  @apply font-serif italic;
+}
+
+/* Glassmorphism */
+.glass {
+  @apply bg-white/70 backdrop-blur-xl border border-white/20;
+}
+
+.glass-dark {
+  @apply bg-heritage-green/10 backdrop-blur-md border border-white/10;
+}
+
+/* Boutique Catalog Buttons */
+.btn-primary {
+  @apply bg-heritage-green text-white px-10 py-4 transition-all duration-500 hover:bg-heritage-dark flex items-center justify-center gap-3 text-[11px] font-bold uppercase tracking-[0.2em] rounded-none shadow-xl hover:shadow-2xl hover:-translate-y-1 relative overflow-hidden;
+}
+
+.btn-primary::after {
+  content: '';
+  @apply absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-all duration-1000;
+}
+
+.btn-primary:hover::after {
+  @apply left-full;
+}
+
+.btn-secondary {
+  @apply border border-heritage-green/20 text-heritage-green px-10 py-4 transition-all duration-500 hover:bg-heritage-green hover:text-white text-[11px] font-bold uppercase tracking-[0.2em] rounded-none flex items-center justify-center gap-3;
+}
+
+/* Product Card Styling */
+.product-card {
+  @apply relative transition-all duration-700 flex flex-col;
+}
+
+.product-image-container {
+  @apply relative aspect-[3/4] overflow-hidden mb-6 bg-[#F5F1EB];
+}
+
+.product-image {
+  @apply w-full h-full object-cover transition-transform duration-1000;
+}
+
+/* Typography Helpers */
+.luxury-label {
+  @apply text-[10px] uppercase font-bold tracking-[0.3em] text-rich-copper mb-2 block;
+}
+
+.section-title {
+  @apply text-4xl md:text-6xl font-light mb-6;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-cream-base;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-heritage-green/20 rounded-full hover:bg-heritage-green/40 transition-colors;
+}
+
+/* Text Overlays */
+.text-stroke {
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.4);
+  color: transparent;
+  backdrop-filter: blur(2px);
+}
+
+.shadow-glow {
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+}
+
+.hero-gradient-overlay {
+  background: linear-gradient(to right, rgba(253, 251, 247, 0.95) 0%, rgba(253, 251, 247, 0.4) 50%, transparent 100%);
+}
+
+.nav-glass {
+  @apply bg-cream-base/30 backdrop-blur-md border-b border-heritage-green/5;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  @apply bg-heritage-green/10 rounded-full hover:bg-heritage-green/30;
+}
+
