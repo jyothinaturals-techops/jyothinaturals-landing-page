@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'motion/react';
-import { 
-  MessageCircle, 
-  ChevronDown, 
+import {
+  MessageCircle,
+  ChevronDown,
   ArrowRight,
   Instagram,
   Facebook,
@@ -140,7 +140,7 @@ const PRODUCTS: Product[] = [
   {
     id: "kumkumadhi-oil",
     name: "Kumkumadhi Oil",
-    description: "A luxurious Ayurvedic facial oil infused with pure Kashmiri saffron, sandalwood, and precious herbs. This time-tested recipe deeply penetrates the skin to illuminate skin tone, fade dark spots, and smooth fine lines, restoring a glowing, youthful, and naturally radiant complexion.",
+    description: "A luxurious Ayurvedic facial oil infused with pure Kashmiri saffron, sandalwood, and precious herbs. This traditional formulation deeply penetrates the skin to illuminate skin tone, fade dark spots, and smooth fine lines, restoring a glowing, youthful, and naturally radiant complexion.",
     ingredients: "Pure Saffron (Kumkuma), Sandalwood (Chandana), Manjistha, Yashtimadhu, Lodhra, Sesame Oil base.",
     directions: "Apply 3-5 drops on clean, damp face and neck at night. Massage gently in upward circular motions for 2-3 minutes. Leave on overnight for maximum benefits.",
     warning: "For external use only. Patch test recommended. Saffron can sometimes cause minor irritation in extremely sensitive skin types. Avoid contact with eyes. Store in a cool, dry place.",
@@ -196,14 +196,14 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   return (
     <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${scrolled ? 'py-4 nav-glass shadow-lg' : 'py-8 bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
         <div className="text-heritage-green font-display text-2xl font-bold tracking-tight">
           Jyothi <span className="font-light italic text-rich-copper">Naturals</span>
         </div>
-        
+
         <div className="hidden md:flex gap-10">
           {['Products', 'Heritage', 'Process', 'Contact'].map((item) => (
             <a key={item} href={`#${item.toLowerCase()}`} className="text-[11px] font-bold uppercase tracking-[0.3em] text-heritage-green/60 hover:text-heritage-green hover:scale-105 transition-all duration-300 relative group">
@@ -212,10 +212,10 @@ const Navbar = () => {
             </a>
           ))}
         </div>
-        
+
         <div className="flex items-center gap-6">
-          <a 
-            href="https://wa.me/919731414523?text=Hello%20Jyothi%20Naturals!%20I%20visited%20your%20website%20and%20would%20like%20to%20inquire%20about%20your%20products." 
+          <a
+            href="https://wa.me/919731414523?text=Hello%20Jyothi%20Naturals!%20I%20visited%20your%20website%20and%20would%20like%20to%20inquire%20about%20your%20products."
             className={`hidden sm:flex items-center justify-center border border-heritage-green/20 text-heritage-green px-6 py-2 rounded-none text-[10px] font-bold uppercase tracking-widest hover:bg-heritage-green hover:text-white transition-all duration-500 ${scrolled ? 'bg-white/40' : ''}`}
           >
             WhatsApp Us
@@ -225,17 +225,17 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-      
+
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden absolute top-full left-0 w-full bg-cream-base border-b border-heritage-green/5 shadow-2xl p-10 flex flex-col gap-8"
           >
-            {['Collection', 'Heritage', 'Process', 'Contact'].map((item) => (
+            {['Products', 'Heritage', 'Process', 'Contact'].map((item) => (
               <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-bold uppercase tracking-widest text-center" onClick={() => setIsOpen(false)}>
                 {item}
               </a>
@@ -252,26 +252,26 @@ const ProductCard = ({ product, index, onOpen }: { product: Product; index: numb
   const maxPrice = product.sizes && product.sizes.length > 0 ? Math.max(...product.sizes.map(s => s.price)) : 0;
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8, delay: (index % 3) * 0.1 }}
       className="product-card group"
     >
-      <div 
-        onClick={() => onOpen(product)} 
+      <div
+        onClick={() => onOpen(product)}
         className="product-image-container group cursor-pointer"
       >
-        <img 
-          src={product.image} 
-          alt={product.name} 
+        <img
+          src={product.image}
+          alt={product.name}
           className="product-image group-hover:scale-110"
         />
         <div className="absolute inset-0 bg-heritage-green/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
         <div className="absolute top-4 left-4 flex flex-col gap-1.5 items-start">
           <span className="glass px-3 py-1 text-[9px] uppercase font-bold tracking-widest text-heritage-green shadow-sm">
-            {product.type === 'oil' ? 'Alchemy' : 'Essence'}
+            {product.type === 'oil' ? 'Nourish' : 'Essence'}
           </span>
           {product.comingSoon && (
             <span className="bg-rich-copper text-white px-3 py-1 text-[9px] uppercase font-bold tracking-widest shadow-md">
@@ -279,7 +279,7 @@ const ProductCard = ({ product, index, onOpen }: { product: Product; index: numb
             </span>
           )}
         </div>
-        <button 
+        <button
           onClick={(e) => {
             e.stopPropagation();
             onOpen(product);
@@ -289,7 +289,7 @@ const ProductCard = ({ product, index, onOpen }: { product: Product; index: numb
           Details
         </button>
       </div>
-      
+
       <div className="space-y-4">
         <div className="flex justify-between items-start">
           <div className="space-y-1">
@@ -307,11 +307,11 @@ const ProductCard = ({ product, index, onOpen }: { product: Product; index: numb
             </div>
           </div>
         </div>
-        
+
         <p className="text-sm text-ink-deep/60 leading-relaxed font-serif italic line-clamp-2">{product.description}</p>
-        
+
         <div className="flex gap-4 pt-2">
-          <button 
+          <button
             onClick={() => onOpen(product)}
             className="text-[10px] font-bold uppercase tracking-[0.2em] text-heritage-green border-b border-heritage-green/20 pb-1 hover:border-rich-copper transition-colors cursor-pointer text-left"
           >
@@ -331,14 +331,14 @@ const Hero = () => {
   return (
     <section className="relative h-screen bg-cream-base overflow-hidden">
       {/* Background Image with Parallax */}
-      <motion.div 
+      <motion.div
         style={{ y: y1 }}
         className="absolute inset-0 z-0"
       >
-        <img 
-          src={heroImg} 
-          alt="Luxury Essence" 
-          className="w-full h-full object-cover scale-110" 
+        <img
+          src={heroImg}
+          alt="Luxury Essence"
+          className="w-full h-full object-cover scale-110"
         />
         <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-cream-base to-transparent"></div>
       </motion.div>
@@ -347,20 +347,19 @@ const Hero = () => {
       <div className="absolute inset-0 z-[1] bg-cream-base/40 md:hidden"></div>
 
       <div className="relative z-10 h-full max-w-[1440px] mx-auto px-6 md:px-20 flex items-center">
-        <motion.div 
+        <motion.div
           style={{ opacity }}
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.2, ease: "easeOut" }}
           className="max-w-2xl"
         >
-          <span className="luxury-label !text-rich-copper">Harvested by Hand • Bottled with Intention</span>
           <h1 className="text-6xl md:text-[7rem] leading-[0.9] font-light text-heritage-green mb-10">
-            Sacred <br />
-            <span className="serif-italic text-rich-copper">Bounty.</span>
+            Skin knows <br />
+            <span className="serif-italic text-rich-copper">no gender.</span>
           </h1>
           <p className="text-lg md:text-xl text-ink-deep/80 font-serif italic mb-12 max-w-lg leading-relaxed">
-            Unearthing 500-year-old family recipes to restore your skin's natural resonance. 100% pure alchemy from the lush valleys.
+            Simple, gentle, and effective daily skincare crafted with wholesome, plant-based ingredients to support your skin's natural health.
           </p>
           <div className="flex flex-col sm:flex-row gap-6">
             <a href="#products" className="btn-primary group">
@@ -382,7 +381,7 @@ const Hero = () => {
       </div>
 
       {/* Floating element */}
-      <motion.div 
+      <motion.div
         animate={{ y: [0, -20, 0] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
         className="absolute bottom-20 left-1/2 -translate-x-1/2 md:left-20 md:translate-x-0 flex flex-col items-center gap-4 text-heritage-green/40"
@@ -396,10 +395,10 @@ const Hero = () => {
 
 const Craftsmanship = () => {
   const steps = [
-    { icon: <Leaf />, title: "Botanical Foraging", desc: "We source wild-harvested herbs from protected ecological zones." },
-    { icon: <Flame />, title: "Slow Infusion", desc: "Oils are cured for 21 days in traditional brass vessels." },
-    { icon: <Droplets />, title: "Pure Extraction", desc: "Cold-pressed methods ensure every molecule of potency remains." },
-    { icon: <Wind />, title: "Small Batch", desc: "No mass production. Every bottle is hand-poured and blessed." }
+    { icon: <Leaf />, title: "Natural Ingredients", desc: "Made with carefully selected natural ingredients." },
+    { icon: <Flame />, title: "Traditional Care", desc: "Prepared in small batches with traditional care." },
+    { icon: <Droplets />, title: "Mindful Preparation", desc: "Inspired by traditional wellness and mindful preparation." },
+    { icon: <Wind />, title: "Handcrafted Batches", desc: "Every batch is hand-poured and packaged with care." }
   ];
 
   return (
@@ -413,9 +412,9 @@ const Craftsmanship = () => {
                 Crafted in <br /> <span className="serif-italic text-copper-light">Deep Patience.</span>
               </h2>
             </div>
-            
+
             <p className="text-xl text-white/60 font-serif italic leading-relaxed">
-              True Ayurveda cannot be rushed. It follows the rhythm of the cycles, the temperature of the urns, and the intent of the hand.
+              Our process is grounded in simplicity and patience, ensuring every batch is made safely and authentically.
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 pt-8">
@@ -437,7 +436,7 @@ const Craftsmanship = () => {
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center space-y-4">
                   <p className="text-8xl md:text-[12rem] font-display text-white/20 select-none shadow-glow">100%</p>
-                  <p className="text-sm uppercase tracking-[0.5em] text-copper-light font-bold">Natural Alchemy</p>
+                  <p className="text-sm uppercase tracking-[0.5em] text-copper-light font-bold">Purely Natural</p>
                 </div>
               </div>
             </div>
@@ -461,7 +460,7 @@ const Testimonials = () => {
         <span className="luxury-label">Whispers from the Collective</span>
         <div className="mt-20 space-y-32">
           {reviews.map((rev, i) => (
-            <motion.div 
+            <motion.div
               key={i}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -500,26 +499,26 @@ export default function App() {
 
   const getWhatsAppUrl = () => {
     if (!selectedProduct || !selectedSize) return "https://wa.me/919731414523";
-    
+
     const totalPrice = selectedSize.price * quantity;
     const isComingSoon = selectedProduct.comingSoon;
-    
+
     let message = "";
     if (isComingSoon) {
       message = `Hello Jyothi Naturals! I am interested in pre-ordering the following product from your website:\n\n*Product:* ${selectedProduct.name}\n*Size/Weight:* ${selectedSize.size}\n*Quantity:* ${quantity}\n*Estimated Total:* ₹${totalPrice}\n\nPlease notify me when it is available!`;
     } else {
       message = `Hello Jyothi Naturals! I would like to purchase the following product from your website:\n\n*Product:* ${selectedProduct.name}\n*Size/Weight:* ${selectedSize.size}\n*Quantity:* ${quantity}\n*Total:* ₹${totalPrice}\n\nCan you please confirm my order?`;
     }
-    
+
     return `https://wa.me/919731414523?text=${encodeURIComponent(message)}`;
   };
 
   return (
     <div className="min-h-screen selection:bg-rich-copper selection:text-white">
       <Navbar />
-      
+
       <Hero />
-      
+
       <section id="products" className="py-40 bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-10">
@@ -533,7 +532,7 @@ export default function App() {
               Each vessel is numbered and dated, reflecting the harvest season.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
             {PRODUCTS.map((product, i) => (
               <ProductCard key={product.id} product={product} index={i} onOpen={setSelectedProduct} />
@@ -545,33 +544,33 @@ export default function App() {
       {/* Product Detail Modal */}
       <AnimatePresence>
         {selectedProduct && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[1000] flex items-center justify-center p-6 md:p-12"
           >
             <div className="absolute inset-0 bg-heritage-dark/95 backdrop-blur-sm" onClick={() => setSelectedProduct(null)}></div>
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
               className="relative w-full max-w-5xl bg-cream-base overflow-hidden flex flex-col md:flex-row h-full max-h-[85vh] shadow-2xl"
             >
-              <button 
+              <button
                 onClick={() => setSelectedProduct(null)}
                 className="absolute top-6 right-6 z-10 text-heritage-green hover:rotate-90 transition-transform p-2 bg-white/50 backdrop-blur cursor-pointer"
               >
                 <X className="w-6 h-6" />
               </button>
-              
+
               <div className="w-full md:w-1/2 bg-[#F5F1EB] relative overflow-hidden">
                 <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full h-full object-cover" />
               </div>
 
               <div className="w-full md:w-1/2 p-8 md:p-16 overflow-y-auto custom-scrollbar">
                 <div className="flex items-center gap-3.5 mb-2 flex-wrap">
-                  <span className="luxury-label !mb-0">{selectedProduct.type === 'oil' ? 'Sacred Alchemy' : 'Botanical Essence'}</span>
+                  <span className="luxury-label !mb-0">{selectedProduct.type === 'oil' ? 'Nourishing Oil' : 'Botanical Essence'}</span>
                   {selectedProduct.comingSoon && (
                     <span className="bg-rich-copper text-white px-2.5 py-0.5 text-[9px] uppercase font-bold tracking-widest shadow-sm">
                       Coming Soon
@@ -579,7 +578,7 @@ export default function App() {
                   )}
                 </div>
                 <h2 className="text-4xl md:text-5xl font-light mb-8 text-heritage-green leading-snug">{selectedProduct.name}</h2>
-                
+
                 <div className="space-y-10">
                   <div className="space-y-4">
                     <p className="text-[10px] uppercase font-bold tracking-widest text-rich-copper">Description</p>
@@ -597,11 +596,10 @@ export default function App() {
                             <button
                               key={sizeObj.size}
                               onClick={() => setSelectedSize(sizeObj)}
-                              className={`px-4 py-2.5 text-xs font-medium uppercase tracking-wider border transition-all duration-300 rounded-none cursor-pointer flex items-center ${
-                                isSelected 
-                                  ? 'bg-heritage-green text-white border-heritage-green shadow-md animate-pulse-subtle' 
-                                  : 'bg-transparent text-heritage-green border-heritage-green/20 hover:border-heritage-green hover:bg-heritage-green/5'
-                              }`}
+                              className={`px-4 py-2.5 text-xs font-medium uppercase tracking-wider border transition-all duration-300 rounded-none cursor-pointer flex items-center ${isSelected
+                                ? 'bg-heritage-green text-white border-heritage-green shadow-md animate-pulse-subtle'
+                                : 'bg-transparent text-heritage-green border-heritage-green/20 hover:border-heritage-green hover:bg-heritage-green/5'
+                                }`}
                             >
                               <span>{sizeObj.size}</span>
                               <span className={`mx-2 text-[10px] ${isSelected ? 'text-white/30' : 'text-heritage-green/20'}`}>|</span>
@@ -618,21 +616,21 @@ export default function App() {
                     <p className="text-[10px] uppercase font-bold tracking-widest text-rich-copper">Quantity</p>
                     <div className="flex items-center gap-6">
                       <div className="flex items-center border border-heritage-green/20 bg-transparent h-[45px]">
-                        <button 
+                        <button
                           onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
                           className="px-4 h-full flex items-center justify-center text-heritage-green hover:bg-heritage-green/5 transition-colors cursor-pointer"
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
                         <span className="w-12 text-center text-sm font-bold text-heritage-green">{quantity}</span>
-                        <button 
+                        <button
                           onClick={() => setQuantity(prev => prev + 1)}
                           className="px-4 h-full flex items-center justify-center text-heritage-green hover:bg-heritage-green/5 transition-colors cursor-pointer"
                         >
                           <Plus className="w-3.5 h-3.5" />
                         </button>
                       </div>
-                      
+
                       {selectedSize && (
                         <div className="text-heritage-green font-display text-lg flex items-center gap-1.5">
                           Total: <span className="font-sans font-extrabold text-2xl text-rich-copper tracking-tight">₹{selectedSize.price * quantity}</span>
@@ -657,13 +655,13 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="p-6 border border-heritage-green/5 bg-heritage-green/[0.02] space-y-4">
-                    <p className="text-[10px] uppercase font-bold tracking-widest text-heritage-green/40">Conscious Care</p>
-                    <p className="text-xs text-heritage-green/50 italic leading-relaxed">{selectedProduct.warning}</p>
+                  <div className="space-y-2 pt-2 border-t border-heritage-green/5">
+                    <p className="text-[10px] uppercase font-bold tracking-widest text-heritage-green/30">CONSCIOUS CARE</p>
+                    <p className="text-xs text-ink-deep/40 italic leading-relaxed">{selectedProduct.warning}</p>
                   </div>
 
                   <div className="pt-4">
-                    <a 
+                    <a
                       href={getWhatsAppUrl()}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -687,10 +685,10 @@ export default function App() {
       <section id="heritage" className="py-40 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center gap-20">
           <div className="w-full md:w-1/2 relative">
-             <div className="aspect-[4/5] bg-cream-base">
-               <img src={heroImg} className="w-full h-full object-cover brightness-90 contrast-110" alt="Heritage" />
-             </div>
-             <div className="absolute -top-10 -right-10 w-40 h-40 border border-heritage-green/10 hidden md:block"></div>
+            <div className="aspect-[4/5] bg-cream-base">
+              <img src={heroImg} className="w-full h-full object-cover brightness-90 contrast-110" alt="Heritage" />
+            </div>
+            <div className="absolute -top-10 -right-10 w-40 h-40 border border-heritage-green/10 hidden md:block"></div>
           </div>
           <div className="w-full md:w-1/2 space-y-10">
             <span className="luxury-label">Our Story</span>
@@ -698,20 +696,25 @@ export default function App() {
               Legacy in <br /><span className="serif-italic text-rich-copper">Every Drop.</span>
             </h2>
             <p className="text-xl text-ink-deep/60 font-serif italic leading-relaxed">
-              "My grandmother taught me that nature doesn't speak in loud voices. It whispers in the properties of the roots and the colors of the petals."
+              “What began in our grandmother Jyothi’s kitchen became a tradition of care, crafted through generations.”
             </p>
-            <p className="text-ink-deep/60 leading-relaxed">
-              Jyothi Naturals was born from a desire to preserve these whispers. We don't use labs; we use gardens. We don't use chemicals; we use heritage.
-            </p>
+            <div className="space-y-6 text-ink-deep/60 leading-relaxed">
+              <p>
+                Jyothi Naturals was created to preserve the wisdom, rituals, and recipes passed down by our grandmother, Jyothi. While a few of our formulations come directly from her treasured homemade remedies, the rest are thoughtfully developed through years of learning, certification, and care by Sujatha.
+              </p>
+              <p>
+                Every product is rooted in tradition, shaped by knowledge, and made with the belief that skincare should feel honest, gentle, and timeless.
+              </p>
+            </div>
             <div className="pt-6">
-               <p className="font-script text-7xl text-rich-copper">Jyothi</p>
-               <p className="text-[10px] uppercase font-bold tracking-widest text-heritage-green/40 mt-2">Founder & Recipe Keeper</p>
+              <p className="font-serif italic text-4xl font-light text-rich-copper tracking-wide">Sujatha</p>
+              <p className="text-[10px] uppercase font-bold tracking-widest text-heritage-green/40 mt-2">Founder</p>
             </div>
           </div>
         </div>
       </section>
 
-      <footer className="bg-[#122117] py-32 text-white/40">
+      <footer id="contact" className="bg-[#122117] py-32 text-white/40">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 pb-20 border-b border-white/5">
             <div className="lg:col-span-2 space-y-12">
@@ -719,45 +722,43 @@ export default function App() {
                 Jyothi <span className="text-copper-light italic font-light">Naturals</span>
               </div>
               <p className="max-w-sm text-lg font-serif italic text-white/50 leading-relaxed">
-                Slow-crafted, small-batch Ayurveda from the heart of Kerala. Preserving ancestral skin wisdom for the modern soul.
+                Homemade skincare made with love & care. <br />
+                SKIN KNOWS NO GENDER
               </p>
               <div className="flex gap-10">
                 <Instagram className="w-5 h-5 cursor-pointer hover:text-white transition-colors" />
                 <Facebook className="w-5 h-5 cursor-pointer hover:text-white transition-colors" />
               </div>
             </div>
-            
+
             <div className="space-y-10">
-              <p className="text-[10px] uppercase font-bold tracking-widest text-white">The Collection</p>
+              <p className="text-[10px] uppercase font-bold tracking-widest text-white">Shop</p>
               <ul className="space-y-6 text-[10px] tracking-[0.2em] font-medium">
-                <li><a href="#" className="hover:text-white transition-colors uppercase">Skin Alchemy</a></li>
-                <li><a href="#" className="hover:text-white transition-colors uppercase">Hair Rituals</a></li>
-                <li><a href="#" className="hover:text-white transition-colors uppercase">Curated Sets</a></li>
+                <li><a href="#products" className="hover:text-white transition-colors uppercase">Products</a></li>
               </ul>
             </div>
 
             <div className="space-y-10">
-              <p className="text-[10px] uppercase font-bold tracking-widest text-white">Maison</p>
+              <p className="text-[10px] uppercase font-bold tracking-widest text-white">About</p>
               <ul className="space-y-6 text-[10px] tracking-[0.2em] font-medium">
-                <li><a href="#" className="hover:text-white transition-colors uppercase">Heritage</a></li>
-                <li><a href="#" className="hover:text-white transition-colors uppercase">The Process</a></li>
-                <li><a href="#" className="hover:text-white transition-colors uppercase">Concierge</a></li>
+                <li><a href="#process" className="hover:text-white transition-colors uppercase">Process</a></li>
+                <li><a href="#heritage" className="hover:text-white transition-colors uppercase">Heritage</a></li>
               </ul>
             </div>
           </div>
-          
+
           <div className="pt-20 flex flex-col md:flex-row justify-between items-center gap-10 text-[10px] uppercase font-medium tracking-[0.3em]">
             <p>© 2026 Jyothi Naturals. Intention in every bottle.</p>
             <div className="flex gap-12 opacity-60">
-              <span className="cursor-pointer hover:text-white">Privacy Bureau</span>
-              <span className="cursor-pointer hover:text-white">Terms of Maison</span>
+              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
             </div>
           </div>
         </div>
       </footer>
 
       <div className="fixed bottom-10 right-10 z-[200]">
-        <a 
+        <a
           href="https://wa.me/919731414523?text=Hello%20Jyothi%20Naturals!%20I%20visited%20your%20website%20and%20would%20like%20to%20inquire%20about%20your%20products."
           className="w-16 h-16 bg-rich-copper text-white rounded-full flex items-center justify-center shadow-[0_20px_40px_rgba(166,124,82,0.3)] hover:scale-110 active:scale-95 transition-all duration-500 group relative cursor-pointer"
         >
