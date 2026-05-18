@@ -5,7 +5,6 @@ import {
   ChevronDown,
   ArrowRight,
   Instagram,
-  Facebook,
   Menu,
   X,
   Plus,
@@ -27,6 +26,9 @@ import hairPack from '@/assets/hair-pack.png';
 import kumkumadhiOil from '@/assets/kumkumadhi-oil.png';
 import nalunguMaavu from '@/assets/nalungu-maavu.png';
 import nalpamaradhiOil from '@/assets/nalpamaradhi-oil.png';
+import logoText from '@/assets/logo_text.png';
+import brandLogo from '@/assets/logo.png';
+import logoTextTransparent from '@/assets/logo_text_transparent.png';
 
 interface ProductSize {
   size: string;
@@ -198,11 +200,15 @@ const Navbar = () => {
   }, []);
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${scrolled ? 'py-4 nav-glass shadow-lg' : 'py-8 bg-transparent'}`}>
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${scrolled ? 'py-1 md:py-0 nav-glass shadow-lg' : 'py-3 md:py-2 bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
-        <div className="text-heritage-green font-display text-2xl font-bold tracking-tight">
-          Jyothi <span className="font-light italic text-rich-copper">Naturals</span>
-        </div>
+        <a href="#" className="flex items-center">
+          <img 
+            src={logoTextTransparent} 
+            alt="Jyothi Naturals" 
+            className="h-14 md:h-20 w-auto object-contain hover:opacity-90 transition-opacity" 
+          />
+        </a>
 
         <div className="hidden md:flex gap-10">
           {['Products', 'Heritage', 'Process', 'Contact'].map((item) => (
@@ -718,16 +724,27 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 pb-20 border-b border-white/5">
             <div className="lg:col-span-2 space-y-12">
-              <div className="text-white font-display text-4xl font-bold tracking-tight">
-                Jyothi <span className="text-copper-light italic font-light">Naturals</span>
-              </div>
+              <a href="#" className="inline-block">
+                <img 
+                  src={logoText} 
+                  alt="Jyothi Naturals" 
+                  className="h-12 md:h-16 object-contain hover:opacity-80 transition-opacity" 
+                  style={{ filter: 'invert(1) grayscale(1) brightness(3)', mixBlendMode: 'screen' }} 
+                />
+              </a>
               <p className="max-w-sm text-lg font-serif italic text-white/50 leading-relaxed">
                 Homemade skincare made with love & care. <br />
                 SKIN KNOWS NO GENDER
               </p>
               <div className="flex gap-10">
-                <Instagram className="w-5 h-5 cursor-pointer hover:text-white transition-colors" />
-                <Facebook className="w-5 h-5 cursor-pointer hover:text-white transition-colors" />
+                <a 
+                  href="https://www.instagram.com/jyothinaturals?igsh=eDRhZ2YyMmlrZm1j" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-white/40 hover:text-white transition-colors"
+                >
+                  <Instagram className="w-5 h-5 cursor-pointer" />
+                </a>
               </div>
             </div>
 
