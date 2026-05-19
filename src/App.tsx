@@ -16,19 +16,19 @@ import {
 } from 'lucide-react';
 
 // Assets
-import heroImg from '@/assets/hero_premium.png';
-import radianceOil from '@/assets/radiance-oil.png';
-import glowPack from '@/assets/glow-pack.png';
-import manjisthaOil from '@/assets/manjistha-oil.png';
-import manjisthaPack from '@/assets/manjistha-pack.png';
-import hairOil from '@/assets/hair-oil.png';
-import hairPack from '@/assets/hair-pack.png';
-import kumkumadhiOil from '@/assets/kumkumadhi-oil.png';
-import nalunguMaavu from '@/assets/nalungu-maavu.png';
-import nalpamaradhiOil from '@/assets/nalpamaradhi-oil.png';
-import logoText from '@/assets/logo_text.png';
-import brandLogo from '@/assets/logo.png';
-import logoTextTransparent from '@/assets/logo_text_transparent.png';
+import heroImg from '@/assets/hero_premium.webp';
+import radianceOil from '@/assets/radiance-oil.webp';
+import glowPack from '@/assets/glow-pack.webp';
+import manjisthaOil from '@/assets/manjistha-oil.webp';
+import manjisthaPack from '@/assets/manjistha-pack.webp';
+import hairOil from '@/assets/hair-oil.webp';
+import hairPack from '@/assets/hair-pack.webp';
+import kumkumadhiOil from '@/assets/kumkumadhi-oil.webp';
+import nalunguMaavu from '@/assets/nalungu-maavu.webp';
+import nalpamaradhiOil from '@/assets/nalpamaradhi-oil.webp';
+import logoText from '@/assets/logo_text.webp';
+import brandLogo from '@/assets/logo.webp';
+import logoTextTransparent from '@/assets/logo_text_transparent.webp';
 
 interface ProductSize {
   size: string;
@@ -189,6 +189,27 @@ const PRODUCTS: Product[] = [
   }
 ];
 
+function usePerformanceMode() {
+  const [isLowPower, setIsLowPower] = useState(false);
+
+  useEffect(() => {
+    const checkPerformanceMode = () => {
+      const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+      const isMobileScreen = window.innerWidth < 1024;
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+        (navigator.userAgent.includes('Macintosh') && navigator.maxTouchPoints > 1);
+      
+      setIsLowPower(hasTouch || isMobileScreen || isIOS);
+    };
+
+    checkPerformanceMode();
+    window.addEventListener('resize', checkPerformanceMode);
+    return () => window.removeEventListener('resize', checkPerformanceMode);
+  }, []);
+
+  return isLowPower;
+}
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -253,16 +274,16 @@ const Navbar = () => {
   );
 };
 
-const ProductCard = ({ product, index, onOpen }: { product: Product; index: number; onOpen: (p: Product) => void }) => {
+const ProductCard = ({ product, index, onOpen, isLowPower }: { product: Product; index: number; onOpen: (p: Product) => void; isLowPower: boolean }) => {
   const minPrice = product.sizes && product.sizes.length > 0 ? Math.min(...product.sizes.map(s => s.price)) : 0;
   const maxPrice = product.sizes && product.sizes.length > 0 ? Math.max(...product.sizes.map(s => s.price)) : 0;
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={isLowPower ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
+      whileInView={isLowPower ? {} : { opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.8, delay: (index % 3) * 0.1 }}
+      transition={isLowPower ? { duration: 0 } : { duration: 0.8, delay: (index % 3) * 0.1 }}
       className="product-card group"
     >
       <div
@@ -329,24 +350,13 @@ const ProductCard = ({ product, index, onOpen }: { product: Product; index: numb
   );
 };
 
-const Hero = () => {
+const Hero = ({ isLowPower }: { isLowPower: boolean }) => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 500], [0, 80]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
-  // Coordinates and details for ambient champagne particle animations
-  const particles = [
-    { id: 1, size: 8, x: '8%', delay: 0, duration: 14 },
-    { id: 2, size: 12, x: '22%', delay: 2, duration: 18 },
-    { id: 3, size: 6, x: '42%', delay: 1, duration: 15 },
-    { id: 4, size: 14, x: '68%', delay: 3, duration: 20 },
-    { id: 5, size: 10, x: '82%', delay: 0.5, duration: 17 },
-    { id: 6, size: 7, x: '92%', delay: 4, duration: 13 },
-  ];
-
   const [activeIdx, setActiveIdx] = useState(0);
   const [isAutoplay, setIsAutoplay] = useState(true);
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const heroProducts = [
     {
@@ -387,213 +397,180 @@ const Hero = () => {
       setActiveIdx((prev) => (prev + 1) % heroProducts.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [isAutoplay]);
+  }, [isAutoplay, heroProducts.length]);
 
+  const activeProduct = heroProducts[activeIdx];
+
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const handleMouseMove = (e: React.MouseEvent) => {
-    const { clientX, clientY, currentTarget } = e;
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    const x = (clientX - left) / width - 0.5;
-    const y = (clientY - top) / height - 0.5;
+    if (isLowPower) return;
+    const { clientX, clientY } = e;
+    const x = (clientX / window.innerWidth) - 0.5;
+    const y = (clientY / window.innerHeight) - 0.5;
     setMousePos({ x, y });
   };
 
-  const activeProduct = heroProducts[activeIdx];
+  const particles = [
+    { id: 1, size: 8, x: '8%', delay: 0, duration: 14 },
+    { id: 2, size: 12, x: '22%', delay: 2, duration: 18 },
+    { id: 3, size: 6, x: '42%', delay: 1, duration: 15 },
+    { id: 4, size: 14, x: '68%', delay: 3, duration: 20 },
+    { id: 5, size: 10, x: '82%', delay: 0.5, duration: 17 },
+    { id: 6, size: 7, x: '92%', delay: 4, duration: 13 },
+  ];
+
+
 
   return (
     <section
       onMouseMove={handleMouseMove}
       className="relative min-h-screen bg-cream-base flex items-center justify-center py-20 md:py-28 overflow-hidden select-none"
     >
-      {/* Dynamic luxury ambient glows */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <motion.div
-          animate={{
-            scale: [1, 1.15, 1],
-            x: [0, 40, 0],
-            y: [0, -40, 0],
-          }}
-          style={{ backgroundColor: activeProduct.color }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut",
-          }}
-          className="absolute -top-[15%] -left-[10%] w-[55%] h-[55%] rounded-full opacity-[0.08] blur-[130px] transition-colors duration-1000"
-        />
-        <motion.div
-          animate={{
-            scale: [1.1, 0.95, 1.1],
-            x: [0, -30, 0],
-            y: [0, 30, 0],
-          }}
-          transition={{
-            duration: 30,
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut",
-          }}
-          className="absolute -bottom-[15%] -right-[5%] w-[45%] h-[45%] rounded-full bg-rich-copper/10 blur-[110px]"
-        />
-      </div>
-
-      {/* Floating Ambient Organic Botanical Seed Particles */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        {particles.map((p) => (
-          <motion.div
-            key={p.id}
-            initial={{ y: '110vh', opacity: 0 }}
-            animate={{
-              y: '-20vh',
-              opacity: [0, 0.35, 0.35, 0],
-              x: ['0px', '25px', '-25px', '0px']
-            }}
-            transition={{
-              duration: p.duration,
-              repeat: Infinity,
-              delay: p.delay,
-              ease: "easeInOut"
-            }}
-            style={{
-              left: p.x,
-              width: p.size,
-              height: p.size,
-              backgroundColor: activeProduct.color,
-            }}
-            className="absolute rounded-full opacity-40 blur-[0.5px] transition-colors duration-1000"
+        {isLowPower ? (
+          <div
+            style={{ backgroundColor: activeProduct.color }}
+            className="absolute -top-[15%] -left-[10%] w-[55%] h-[55%] rounded-full opacity-[0.05] blur-[100px] transition-colors duration-1000"
           />
-        ))}
+        ) : (
+          <>
+            <motion.div
+              animate={{
+                scale: [1, 1.15, 1],
+                x: [0, 40, 0],
+                y: [0, -40, 0],
+              }}
+              style={{ backgroundColor: activeProduct.color }}
+              transition={{
+                duration: 25,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
+              }}
+              className="absolute -top-[15%] -left-[10%] w-[55%] h-[55%] rounded-full opacity-[0.08] blur-[130px] transition-colors duration-1000"
+            />
+            <motion.div
+              animate={{
+                scale: [1.1, 0.95, 1.1],
+                x: [0, -30, 0],
+                y: [0, 30, 0],
+              }}
+              transition={{
+                duration: 30,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: "easeInOut",
+              }}
+              className="absolute -bottom-[15%] -right-[5%] w-[45%] h-[45%] rounded-full bg-rich-copper/10 blur-[110px]"
+            />
+          </>
+        )}
       </div>
 
-      {/* Floating Botanical SVG Leaves/Branches (Minimalistic Line Art) */}
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.09]">
-        {/* Top-Right branch */}
-        <motion.svg
-          width="260"
-          height="260"
-          viewBox="0 0 100 100"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.6"
-          className="absolute top-10 right-4 text-heritage-green"
-          initial={{ rotate: -8, y: 0 }}
-          animate={{ rotate: 8, y: 12 }}
-          transition={{
-            duration: 14,
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut"
-          }}
-        >
-          <path d="M10,90 Q40,40 90,10" />
-          <path d="M90,10 Q80,25 65,25 Q80,10 90,10" fill="currentColor" />
-          <path d="M70,30 Q60,45 45,45 Q60,30 70,30" fill="currentColor" />
-          <path d="M50,50 Q40,65 25,65 Q40,50 50,50" fill="currentColor" />
-          <path d="M80,20 Q65,35 55,30 Q70,15 80,20" fill="currentColor" />
-          <path d="M60,40 Q45,55 35,50 Q50,35 60,40" fill="currentColor" />
-        </motion.svg>
-
-        {/* Bottom-Left branch */}
-        <motion.svg
-          width="300"
-          height="300"
-          viewBox="0 0 100 100"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="0.6"
-          className="absolute -bottom-12 -left-8 text-heritage-green"
-          initial={{ rotate: 12, x: 0 }}
-          animate={{ rotate: -12, x: 8 }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            repeatType: "mirror",
-            ease: "easeInOut"
-          }}
-        >
-          <path d="M90,90 Q50,40 10,10" />
-          <path d="M10,10 Q20,25 35,25 Q20,10 10,10" fill="currentColor" />
-          <path d="M30,30 Q40,45 55,45 Q40,30 30,30" fill="currentColor" />
-          <path d="M50,50 Q60,65 75,65 Q60,50 50,50" fill="currentColor" />
-          <path d="M20,20 Q35,35 45,30 Q30,15 20,20" fill="currentColor" />
-          <path d="M40,40 Q55,55 65,50 Q50,35 40,40" fill="currentColor" />
-        </motion.svg>
-      </div>
+      {!isLowPower && (
+        <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+          {particles.map((p) => (
+            <motion.div
+              key={p.id}
+              initial={{ y: '110vh', opacity: 0 }}
+              animate={{
+                y: '-20vh',
+                opacity: [0, 0.35, 0.35, 0],
+                x: ['0px', '25px', '-25px', '0px']
+              }}
+              transition={{
+                duration: p.duration,
+                repeat: Infinity,
+                delay: p.delay,
+                ease: "easeInOut"
+              }}
+              style={{
+                left: p.x,
+                width: p.size,
+                height: p.size,
+                backgroundColor: activeProduct.color,
+              }}
+              className="absolute rounded-full opacity-40 blur-[0.5px] transition-colors duration-1000"
+            />
+          ))}
+        </div>
+      )}
 
       <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 h-full flex items-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
 
-          {/* Left Column: Premium Interactive Product Showcase */}
           <div className="col-span-1 lg:col-span-6 flex flex-col justify-center items-center order-2 lg:order-1 mt-6 lg:mt-0 relative min-h-[480px] md:min-h-[560px] w-full">
 
-            {/* The Cinematic Interactive Pod */}
-            <div className="relative w-full max-w-[460px] h-[360px] md:h-[440px] flex items-center justify-center">
-
-              {/* Animated Zen Halo background */}
+            <div className="relative w-full aspect-square max-w-[320px] sm:max-w-[420px] md:max-w-[480px] mx-auto flex items-center justify-center">
               <motion.div
-                style={{
-                  y,
-                  x: mousePos.x * 20,
-                  y: mousePos.y * 20,
-                }}
-                className="absolute w-[280px] h-[280px] md:w-[400px] md:h-[400px] rounded-full flex items-center justify-center pointer-events-none transition-all duration-700"
+                style={{ y: isLowPower ? 0 : y }}
+                className="absolute w-full h-full flex items-center justify-center pointer-events-none"
               >
-                {/* Glowing fluid backdrop */}
-                <div
-                  style={{ backgroundColor: activeProduct.color }}
-                  className="absolute inset-4 rounded-full opacity-[0.06] blur-2xl transition-all duration-1000"
-                />
-
-                {/* Concentric Circle 1 - Brand Ring */}
                 <motion.div
-                  className="absolute inset-0 rounded-full border border-heritage-green/5 flex items-center justify-center"
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                  style={isLowPower ? {} : {
+                    x: mousePos.x * 20,
+                    y: mousePos.y * 20,
+                  }}
+                  className="absolute w-[280px] h-[280px] md:w-[400px] md:h-[400px] rounded-full flex items-center justify-center transition-all duration-700"
                 >
-                  <svg viewBox="0 0 200 200" className="absolute w-full h-full pointer-events-none opacity-20">
-                    <path id="heroBrandCirclePath" d="M 100, 100 m -85, 0 a 85,85 0 1,1 170,0 a 85,85 0 1,1 -170,0" fill="none" />
-                    <text className="text-[6.5px] uppercase font-bold tracking-[0.27em] fill-heritage-green font-sans">
-                      <textPath href="#heroBrandCirclePath" startOffset="0%">
-                        Jyothi Naturals • Skin Knows No Gender • Pure Handcrafted Skincare • Intention in Every Drop •
-                      </textPath>
-                    </text>
-                  </svg>
+                  <div
+                    style={{ backgroundColor: activeProduct.color }}
+                    className="absolute inset-4 rounded-full opacity-[0.06] blur-2xl transition-all duration-1000"
+                  />
+
+                  {!isLowPower ? (
+                    <motion.div
+                      className="absolute inset-0 rounded-full border border-heritage-green/5 flex items-center justify-center"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                    >
+                      <svg viewBox="0 0 200 200" className="absolute w-full h-full pointer-events-none opacity-20">
+                        <path id="heroBrandCirclePath" d="M 100, 100 m -85, 0 a 85,85 0 1,1 170,0 a 85,85 0 1,1 -170,0" fill="none" />
+                        <text className="text-[6.5px] uppercase font-bold tracking-[0.27em] fill-heritage-green font-sans">
+                          <textPath href="#heroBrandCirclePath" startOffset="0%">
+                            Jyothi Naturals • Skin Knows No Gender • Pure Handcrafted Skincare • Intention in Every Drop •
+                          </textPath>
+                        </text>
+                      </svg>
+                    </motion.div>
+                  ) : (
+                    <div className="absolute inset-0 rounded-full border border-heritage-green/10" />
+                  )}
+
+                  {!isLowPower ? (
+                    <motion.div
+                      animate={{ rotate: -360 }}
+                      transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                      className="absolute w-[80%] h-[80%] rounded-full border border-dashed border-rich-copper/15"
+                    />
+                  ) : (
+                    <div className="absolute w-[80%] h-[80%] rounded-full border border-dashed border-rich-copper/10" />
+                  )}
+
+                  <div className="absolute w-[60%] h-[60%] rounded-full border border-rich-copper/5" />
                 </motion.div>
-
-                {/* Concentric Circle 2 - Inner dashed gold ring */}
-                <motion.div
-                  animate={{ rotate: -360 }}
-                  transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-                  className="absolute w-[80%] h-[80%] rounded-full border border-dashed border-rich-copper/15"
-                />
-
-                {/* Concentric Circle 3 - Ultra thin golden ring */}
-                <div className="absolute w-[60%] h-[60%] rounded-full border border-rich-copper/5" />
               </motion.div>
 
-              {/* Main Product Container */}
-              <div className="relative z-20 w-[240px] md:w-[320px] aspect-square flex items-center justify-center">
+              <div className="relative z-20 w-[70%] h-[70%] flex items-center justify-center select-none">
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeIdx}
-                    initial={{ opacity: 0, scale: 0.9, y: 15, rotate: -2 }}
-                    animate={{
-                      opacity: 1,
-                      scale: 1,
-                      y: 0,
-                      rotate: 0,
+                    initial={isLowPower ? { opacity: 1, scale: 1, y: 0, rotate: 0 } : { opacity: 0, scale: 0.9, y: 15, rotate: -2 }}
+                    animate={{ opacity: 1, scale: 1, y: 0, rotate: 0 }}
+                    exit={isLowPower ? { opacity: 1 } : { opacity: 0, scale: 0.9, y: -15, rotate: 2 }}
+                    transition={isLowPower ? { duration: 0 } : {
+                      type: "spring",
+                      stiffness: 100,
+                      damping: 18,
                     }}
-                    exit={{ opacity: 0, scale: 0.95, y: -15, filter: "blur(4px)" }}
-                    transition={{ type: "spring", stiffness: 100, damping: 18 }}
-                    className="relative w-full h-full flex items-center justify-center cursor-pointer"
+                    className="relative w-full h-full flex items-center justify-center"
                   >
-                    {/* Shadow underneath product */}
                     <motion.div
-                      animate={{
+                      animate={isLowPower ? { scale: 1, opacity: 0.22 } : {
                         scale: [1, 0.92, 1],
                         opacity: [0.25, 0.18, 0.25]
                       }}
-                      transition={{
+                      transition={isLowPower ? {} : {
                         duration: 6,
                         repeat: Infinity,
                         ease: "easeInOut"
@@ -601,18 +578,17 @@ const Hero = () => {
                       className="absolute -bottom-2 w-32 h-4 bg-ink-deep/20 rounded-full blur-md"
                     />
 
-                    {/* Bottle/Pack image with gentle float */}
                     <motion.div
-                      animate={{
+                      animate={isLowPower ? {} : {
                         y: [0, -10, 0],
                         rotate: [0, 0.8, -0.8, 0]
                       }}
-                      transition={{
+                      transition={isLowPower ? {} : {
                         duration: 6,
                         repeat: Infinity,
                         ease: "easeInOut"
                       }}
-                      whileHover={{ scale: 1.05 }}
+                      whileHover={isLowPower ? {} : { scale: 1.05 }}
                       className="w-full h-full flex items-center justify-center p-6"
                     >
                       <img
@@ -625,10 +601,8 @@ const Hero = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Interactive Parallax Glassmorphic Floating Highlights */}
               <AnimatePresence>
-                {activeProduct.highlights.map((highlight, hIdx) => {
-                  // Coordinate positions to float around the central item
+                {!isLowPower && activeProduct.highlights.map((highlight, hIdx) => {
                   const positions = [
                     { top: '15%', left: '-5%', delay: 0 },
                     { bottom: '22%', right: '-8%', delay: 0.5 },
@@ -643,7 +617,7 @@ const Hero = () => {
                       animate={{
                         opacity: 1,
                         scale: 1,
-                        x: mousePos.x * (15 * (hIdx + 1)), // independent parallax layers
+                        x: mousePos.x * (15 * (hIdx + 1)),
                         y: mousePos.y * (15 * (hIdx + 1)) + (Math.sin(hIdx + 1) * 8),
                       }}
                       exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
@@ -689,7 +663,6 @@ const Hero = () => {
 
             </div>
 
-            {/* Premium Minimalist Switcher Menu */}
             <div className="flex gap-6 md:gap-8 justify-center mt-6 relative z-30 w-full px-4">
               {heroProducts.map((p, idx) => (
                 <button
@@ -718,10 +691,10 @@ const Hero = () => {
           {/* Right Column: Original Branding & Copy */}
           <div className="col-span-1 lg:col-span-6 flex flex-col justify-center order-1 lg:order-2">
             <motion.div
-              style={{ opacity }}
-              initial={{ opacity: 0, y: 25 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1, ease: "easeOut" }}
+              style={{ opacity: isLowPower ? 1 : opacity }}
+              initial={isLowPower ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
+              animate={isLowPower ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
+              transition={isLowPower ? { duration: 0 } : { duration: 1, ease: "easeOut" }}
               className="max-w-xl md:max-w-2xl text-left"
             >
               {/* Premium Luxury Tagline */}
@@ -817,7 +790,7 @@ const Craftsmanship = () => {
           </div>
 
           <div className="relative">
-            <div className="aspect-[4/5] overflow-hidden">
+            <div className="aspect-[4/5] overflow-hidden rounded-2xl">
               <img src={heroImg} className="w-full h-full object-cover grayscale brightness-50 opacity-50" alt="Process" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center space-y-4">
@@ -834,7 +807,7 @@ const Craftsmanship = () => {
   );
 };
 
-const Testimonials = () => {
+const Testimonials = ({ isLowPower }: { isLowPower: boolean }) => {
   const reviews = [
     { text: "The Natural Radiance Oil is unlike anything I've tried. My skin feels like it's finally breathing.", author: "Elena V.", role: "Wellness Architect" },
     { text: "You can smell the authenticity. This isn't just skincare; it's a ritual of grounding.", author: "Sarah M.", role: "Yoga Practitioner" }
@@ -848,9 +821,10 @@ const Testimonials = () => {
           {reviews.map((rev, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
+              initial={isLowPower ? { opacity: 1 } : { opacity: 0 }}
+              whileInView={isLowPower ? {} : { opacity: 1 }}
               viewport={{ once: true }}
+              transition={isLowPower ? { duration: 0 } : { duration: 0.8 }}
               className="space-y-10"
             >
               <p className="text-3xl md:text-5xl font-serif italic text-heritage-green leading-snug">
@@ -869,6 +843,7 @@ const Testimonials = () => {
 };
 
 export default function App() {
+  const isLowPower = usePerformanceMode();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
@@ -903,7 +878,7 @@ export default function App() {
     <div className="min-h-screen selection:bg-rich-copper selection:text-white">
       <Navbar />
 
-      <Hero />
+      <Hero isLowPower={isLowPower} />
 
       <section id="products" className="py-40 bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
@@ -918,7 +893,7 @@ export default function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
             {PRODUCTS.map((product, i) => (
-              <ProductCard key={product.id} product={product} index={i} onOpen={setSelectedProduct} />
+              <ProductCard key={product.id} product={product} index={i} onOpen={setSelectedProduct} isLowPower={isLowPower} />
             ))}
           </div>
         </div>
@@ -938,7 +913,7 @@ export default function App() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-5xl bg-cream-base overflow-hidden flex flex-col md:flex-row h-full max-h-[85vh] shadow-2xl"
+              className="relative w-full max-w-5xl bg-cream-base overflow-hidden flex flex-col md:flex-row h-full max-h-[85vh] shadow-2xl rounded-2xl"
             >
               <button
                 onClick={() => setSelectedProduct(null)}
@@ -1063,12 +1038,12 @@ export default function App() {
 
       <Craftsmanship />
 
-      <Testimonials />
+      <Testimonials isLowPower={isLowPower} />
 
       <section id="heritage" className="py-40 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center gap-20">
           <div className="w-full md:w-1/2 relative">
-            <div className="aspect-[4/5] bg-cream-base">
+            <div className="aspect-[4/5] bg-cream-base overflow-hidden rounded-2xl">
               <img src={heroImg} className="w-full h-full object-cover brightness-90 contrast-110" alt="Heritage" />
             </div>
             <div className="absolute -top-10 -right-10 w-40 h-40 border border-heritage-green/10 hidden md:block"></div>
