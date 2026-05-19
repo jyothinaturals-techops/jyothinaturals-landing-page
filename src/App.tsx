@@ -331,68 +331,448 @@ const ProductCard = ({ product, index, onOpen }: { product: Product; index: numb
 
 const Hero = () => {
   const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 100]);
+  const y = useTransform(scrollY, [0, 500], [0, 80]);
   const opacity = useTransform(scrollY, [0, 400], [1, 0]);
 
+  // Coordinates and details for ambient champagne particle animations
+  const particles = [
+    { id: 1, size: 8, x: '8%', delay: 0, duration: 14 },
+    { id: 2, size: 12, x: '22%', delay: 2, duration: 18 },
+    { id: 3, size: 6, x: '42%', delay: 1, duration: 15 },
+    { id: 4, size: 14, x: '68%', delay: 3, duration: 20 },
+    { id: 5, size: 10, x: '82%', delay: 0.5, duration: 17 },
+    { id: 6, size: 7, x: '92%', delay: 4, duration: 13 },
+  ];
+
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [isAutoplay, setIsAutoplay] = useState(true);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+  const heroProducts = [
+    {
+      name: "Natural Radiance Oil",
+      subName: "Saffron & Rose Petals",
+      image: radianceOil,
+      color: "#A67C52", // Rich copper
+      bgGlow: "rgba(166, 124, 82, 0.15)",
+      tag: "Face Oil",
+      id: "natural-radiance-oil",
+      highlights: ["Saffron Extract", "Rose Petals Blend", "Intense Glow"]
+    },
+    {
+      name: "Universal Glow Pack",
+      subName: "Sandalwood & Saffron",
+      image: glowPack,
+      color: "#C9A683", // Copper light
+      bgGlow: "rgba(201, 166, 131, 0.15)",
+      tag: "Face Pack",
+      id: "universal-glow-pack",
+      highlights: ["Pure Sandalwood", "Kumkuma Extracts", "Softens Skin"]
+    },
+    {
+      name: "Manjistha Face Oil",
+      subName: "Manjistha & Licorice",
+      image: manjisthaOil,
+      color: "#E8C5C8", // Soft rose copper
+      bgGlow: "rgba(232, 197, 200, 0.15)",
+      tag: "Face Oil",
+      id: "manjistha-face-oil",
+      highlights: ["Manjistha Herb", "Yashtimadhu Root", "Even Tone"]
+    }
+  ];
+
+  useEffect(() => {
+    if (!isAutoplay) return;
+    const interval = setInterval(() => {
+      setActiveIdx((prev) => (prev + 1) % heroProducts.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isAutoplay]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY, currentTarget } = e;
+    const { left, top, width, height } = currentTarget.getBoundingClientRect();
+    const x = (clientX - left) / width - 0.5;
+    const y = (clientY - top) / height - 0.5;
+    setMousePos({ x, y });
+  };
+
+  const activeProduct = heroProducts[activeIdx];
+
   return (
-    <section className="relative h-screen bg-cream-base overflow-hidden">
-      {/* Background Image with Parallax */}
-      <motion.div
-        style={{ y: y1 }}
-        className="absolute inset-0 z-0"
-      >
-        <img
-          src={heroImg}
-          alt="Luxury Essence"
-          className="w-full h-full object-cover scale-110"
-        />
-        <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-cream-base to-transparent"></div>
-      </motion.div>
-
-      <div className="absolute inset-0 z-[1] hero-gradient-overlay pointer-events-none md:block hidden"></div>
-      <div className="absolute inset-0 z-[1] bg-cream-base/40 md:hidden"></div>
-
-      <div className="relative z-10 h-full max-w-[1440px] mx-auto px-6 md:px-20 flex items-center">
+    <section
+      onMouseMove={handleMouseMove}
+      className="relative min-h-screen bg-cream-base flex items-center justify-center py-20 md:py-28 overflow-hidden select-none"
+    >
+      {/* Dynamic luxury ambient glows */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <motion.div
-          style={{ opacity }}
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 1.2, ease: "easeOut" }}
-          className="max-w-2xl"
+          animate={{
+            scale: [1, 1.15, 1],
+            x: [0, 40, 0],
+            y: [0, -40, 0],
+          }}
+          style={{ backgroundColor: activeProduct.color }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            repeatType: "mirror",
+            ease: "easeInOut",
+          }}
+          className="absolute -top-[15%] -left-[10%] w-[55%] h-[55%] rounded-full opacity-[0.08] blur-[130px] transition-colors duration-1000"
+        />
+        <motion.div
+          animate={{
+            scale: [1.1, 0.95, 1.1],
+            x: [0, -30, 0],
+            y: [0, 30, 0],
+          }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            repeatType: "mirror",
+            ease: "easeInOut",
+          }}
+          className="absolute -bottom-[15%] -right-[5%] w-[45%] h-[45%] rounded-full bg-rich-copper/10 blur-[110px]"
+        />
+      </div>
+
+      {/* Floating Ambient Organic Botanical Seed Particles */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        {particles.map((p) => (
+          <motion.div
+            key={p.id}
+            initial={{ y: '110vh', opacity: 0 }}
+            animate={{
+              y: '-20vh',
+              opacity: [0, 0.35, 0.35, 0],
+              x: ['0px', '25px', '-25px', '0px']
+            }}
+            transition={{
+              duration: p.duration,
+              repeat: Infinity,
+              delay: p.delay,
+              ease: "easeInOut"
+            }}
+            style={{
+              left: p.x,
+              width: p.size,
+              height: p.size,
+              backgroundColor: activeProduct.color,
+            }}
+            className="absolute rounded-full opacity-40 blur-[0.5px] transition-colors duration-1000"
+          />
+        ))}
+      </div>
+
+      {/* Floating Botanical SVG Leaves/Branches (Minimalistic Line Art) */}
+      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none opacity-[0.09]">
+        {/* Top-Right branch */}
+        <motion.svg
+          width="260"
+          height="260"
+          viewBox="0 0 100 100"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="0.6"
+          className="absolute top-10 right-4 text-heritage-green"
+          initial={{ rotate: -8, y: 0 }}
+          animate={{ rotate: 8, y: 12 }}
+          transition={{
+            duration: 14,
+            repeat: Infinity,
+            repeatType: "mirror",
+            ease: "easeInOut"
+          }}
         >
-          <h1 className="text-6xl md:text-[7rem] leading-[0.9] font-light text-heritage-green mb-10">
-            Skin knows <br />
-            <span className="serif-italic text-rich-copper">no gender.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-ink-deep/80 font-serif italic mb-12 max-w-lg leading-relaxed">
-            Simple, gentle, and effective daily skincare crafted with wholesome, plant-based ingredients to support your skin's natural health.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6">
-            <a href="#products" className="btn-primary group">
-              Shop The Products
-              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </a>
-            <a href="#process" className="btn-secondary">
-              Our Process
-            </a>
+          <path d="M10,90 Q40,40 90,10" />
+          <path d="M90,10 Q80,25 65,25 Q80,10 90,10" fill="currentColor" />
+          <path d="M70,30 Q60,45 45,45 Q60,30 70,30" fill="currentColor" />
+          <path d="M50,50 Q40,65 25,65 Q40,50 50,50" fill="currentColor" />
+          <path d="M80,20 Q65,35 55,30 Q70,15 80,20" fill="currentColor" />
+          <path d="M60,40 Q45,55 35,50 Q50,35 60,40" fill="currentColor" />
+        </motion.svg>
+
+        {/* Bottom-Left branch */}
+        <motion.svg
+          width="300"
+          height="300"
+          viewBox="0 0 100 100"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="0.6"
+          className="absolute -bottom-12 -left-8 text-heritage-green"
+          initial={{ rotate: 12, x: 0 }}
+          animate={{ rotate: -12, x: 8 }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            repeatType: "mirror",
+            ease: "easeInOut"
+          }}
+        >
+          <path d="M90,90 Q50,40 10,10" />
+          <path d="M10,10 Q20,25 35,25 Q20,10 10,10" fill="currentColor" />
+          <path d="M30,30 Q40,45 55,45 Q40,30 30,30" fill="currentColor" />
+          <path d="M50,50 Q60,65 75,65 Q60,50 50,50" fill="currentColor" />
+          <path d="M20,20 Q35,35 45,30 Q30,15 20,20" fill="currentColor" />
+          <path d="M40,40 Q55,55 65,50 Q50,35 40,40" fill="currentColor" />
+        </motion.svg>
+      </div>
+
+      <div className="relative z-10 w-full max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20 h-full flex items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center w-full">
+
+          {/* Left Column: Premium Interactive Product Showcase */}
+          <div className="col-span-1 lg:col-span-6 flex flex-col justify-center items-center order-2 lg:order-1 mt-6 lg:mt-0 relative min-h-[480px] md:min-h-[560px] w-full">
+
+            {/* The Cinematic Interactive Pod */}
+            <div className="relative w-full max-w-[460px] h-[360px] md:h-[440px] flex items-center justify-center">
+
+              {/* Animated Zen Halo background */}
+              <motion.div
+                style={{
+                  y,
+                  x: mousePos.x * 20,
+                  y: mousePos.y * 20,
+                }}
+                className="absolute w-[280px] h-[280px] md:w-[400px] md:h-[400px] rounded-full flex items-center justify-center pointer-events-none transition-all duration-700"
+              >
+                {/* Glowing fluid backdrop */}
+                <div
+                  style={{ backgroundColor: activeProduct.color }}
+                  className="absolute inset-4 rounded-full opacity-[0.06] blur-2xl transition-all duration-1000"
+                />
+
+                {/* Concentric Circle 1 - Brand Ring */}
+                <motion.div
+                  className="absolute inset-0 rounded-full border border-heritage-green/5 flex items-center justify-center"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                >
+                  <svg viewBox="0 0 200 200" className="absolute w-full h-full pointer-events-none opacity-20">
+                    <path id="heroBrandCirclePath" d="M 100, 100 m -85, 0 a 85,85 0 1,1 170,0 a 85,85 0 1,1 -170,0" fill="none" />
+                    <text className="text-[6.5px] uppercase font-bold tracking-[0.27em] fill-heritage-green font-sans">
+                      <textPath href="#heroBrandCirclePath" startOffset="0%">
+                        Jyothi Naturals • Skin Knows No Gender • Pure Handcrafted Skincare • Intention in Every Drop •
+                      </textPath>
+                    </text>
+                  </svg>
+                </motion.div>
+
+                {/* Concentric Circle 2 - Inner dashed gold ring */}
+                <motion.div
+                  animate={{ rotate: -360 }}
+                  transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+                  className="absolute w-[80%] h-[80%] rounded-full border border-dashed border-rich-copper/15"
+                />
+
+                {/* Concentric Circle 3 - Ultra thin golden ring */}
+                <div className="absolute w-[60%] h-[60%] rounded-full border border-rich-copper/5" />
+              </motion.div>
+
+              {/* Main Product Container */}
+              <div className="relative z-20 w-[240px] md:w-[320px] aspect-square flex items-center justify-center">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIdx}
+                    initial={{ opacity: 0, scale: 0.9, y: 15, rotate: -2 }}
+                    animate={{
+                      opacity: 1,
+                      scale: 1,
+                      y: 0,
+                      rotate: 0,
+                    }}
+                    exit={{ opacity: 0, scale: 0.95, y: -15, filter: "blur(4px)" }}
+                    transition={{ type: "spring", stiffness: 100, damping: 18 }}
+                    className="relative w-full h-full flex items-center justify-center cursor-pointer"
+                  >
+                    {/* Shadow underneath product */}
+                    <motion.div
+                      animate={{
+                        scale: [1, 0.92, 1],
+                        opacity: [0.25, 0.18, 0.25]
+                      }}
+                      transition={{
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      className="absolute -bottom-2 w-32 h-4 bg-ink-deep/20 rounded-full blur-md"
+                    />
+
+                    {/* Bottle/Pack image with gentle float */}
+                    <motion.div
+                      animate={{
+                        y: [0, -10, 0],
+                        rotate: [0, 0.8, -0.8, 0]
+                      }}
+                      transition={{
+                        duration: 6,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                      }}
+                      whileHover={{ scale: 1.05 }}
+                      className="w-full h-full flex items-center justify-center p-6"
+                    >
+                      <img
+                        src={activeProduct.image}
+                        alt={activeProduct.name}
+                        className="max-w-full max-h-[85%] object-contain filter drop-shadow-[0_20px_40px_rgba(27,48,34,0.12)] select-none pointer-events-none rounded-3xl"
+                      />
+                    </motion.div>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {/* Interactive Parallax Glassmorphic Floating Highlights */}
+              <AnimatePresence>
+                {activeProduct.highlights.map((highlight, hIdx) => {
+                  // Coordinate positions to float around the central item
+                  const positions = [
+                    { top: '15%', left: '-5%', delay: 0 },
+                    { bottom: '22%', right: '-8%', delay: 0.5 },
+                    { top: '35%', right: '-12%', delay: 1 }
+                  ];
+                  const pos = positions[hIdx];
+
+                  return (
+                    <motion.div
+                      key={`${activeIdx}-${hIdx}`}
+                      initial={{ opacity: 0, scale: 0.85, x: 0, y: 0 }}
+                      animate={{
+                        opacity: 1,
+                        scale: 1,
+                        x: mousePos.x * (15 * (hIdx + 1)), // independent parallax layers
+                        y: mousePos.y * (15 * (hIdx + 1)) + (Math.sin(hIdx + 1) * 8),
+                      }}
+                      exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 80,
+                        damping: 15,
+                        delay: hIdx * 0.1
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: pos.top,
+                        bottom: pos.bottom,
+                        left: pos.left,
+                        right: pos.right,
+                      }}
+                      className="z-30 pointer-events-none hidden sm:block"
+                    >
+                      <motion.div
+                        animate={{
+                          y: [0, -6, 0],
+                        }}
+                        transition={{
+                          duration: 4 + hIdx,
+                          repeat: Infinity,
+                          ease: "easeInOut",
+                          delay: pos.delay,
+                        }}
+                        className="glass px-3.5 py-1.5 rounded-full shadow-[0_8px_20px_rgba(27,48,34,0.04)] border border-rich-copper/10 flex items-center gap-1.5"
+                      >
+                        <span
+                          style={{ backgroundColor: activeProduct.color }}
+                          className="w-1.5 h-1.5 rounded-full transition-colors duration-1000"
+                        />
+                        <span className="text-[10px] font-sans font-bold tracking-wider uppercase text-heritage-green/80">
+                          {highlight}
+                        </span>
+                      </motion.div>
+                    </motion.div>
+                  );
+                })}
+              </AnimatePresence>
+
+            </div>
+
+            {/* Premium Minimalist Switcher Menu */}
+            <div className="flex gap-6 md:gap-8 justify-center mt-6 relative z-30 w-full px-4">
+              {heroProducts.map((p, idx) => (
+                <button
+                  key={p.id}
+                  onClick={() => {
+                    setActiveIdx(idx);
+                    setIsAutoplay(false);
+                  }}
+                  className="group flex flex-col items-start text-left cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className={`text-[10px] font-sans font-extrabold transition-all duration-500 ${activeIdx === idx ? 'text-rich-copper' : 'text-heritage-green/30 group-hover:text-heritage-green/50'}`}>
+                      0{idx + 1}
+                    </span>
+                    <span className={`h-[1px] transition-all duration-700 ${activeIdx === idx ? 'w-10 bg-rich-copper' : 'w-4 bg-heritage-green/10 group-hover:w-8 group-hover:bg-heritage-green/20'}`}></span>
+                  </div>
+                  <span className={`text-[10px] font-bold uppercase tracking-[0.15em] mt-1 transition-colors duration-500 ${activeIdx === idx ? 'text-heritage-green' : 'text-heritage-green/40 group-hover:text-heritage-green/70'}`}>
+                    {p.name.replace("Natural ", "").replace("Universal ", "")}
+                  </span>
+                </button>
+              ))}
+            </div>
+
           </div>
-        </motion.div>
+
+          {/* Right Column: Original Branding & Copy */}
+          <div className="col-span-1 lg:col-span-6 flex flex-col justify-center order-1 lg:order-2">
+            <motion.div
+              style={{ opacity }}
+              initial={{ opacity: 0, y: 25 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className="max-w-xl md:max-w-2xl text-left"
+            >
+              {/* Premium Luxury Tagline */}
+              <motion.div
+                initial={{ opacity: 0, x: -12 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.25 }}
+                className="flex items-center gap-3 mb-6"
+              >
+                <span className="w-8 h-[1px] bg-rich-copper/50"></span>
+                <span className="text-[10px] md:text-[11px] font-bold uppercase tracking-[0.25em] text-rich-copper">
+                  Ayurvedic Skincare
+                </span>
+              </motion.div>
+
+              <h1 className="text-6xl md:text-[6.5rem] lg:text-[7.2rem] leading-[0.9] font-light text-heritage-green mb-10 tracking-tight font-display">
+                Skin knows <br />
+                <span className="serif-italic text-rich-copper font-serif italic">no gender.</span>
+              </h1>
+
+              <p className="text-lg md:text-xl text-ink-deep/70 font-serif italic mb-12 max-w-lg leading-relaxed">
+                Simple, gentle, and effective daily skincare crafted with wholesome, plant-based ingredients to support your skin's natural health.
+              </p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.55 }}
+                className="flex flex-col sm:flex-row gap-6"
+              >
+                <a href="#products" className="btn-primary group">
+                  Shop The Products
+                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </a>
+                <a href="#process" className="btn-secondary hover:shadow-md transition-shadow">
+                  Our Process
+                </a>
+              </motion.div>
+            </motion.div>
+          </div>
+
+        </div>
       </div>
 
-      {/* Side Label */}
-      <div className="absolute right-12 top-1/2 -rotate-90 origin-right hidden lg:block">
-        <p className="text-[10px] uppercase font-bold tracking-[1em] text-heritage-green/30">
-          Est. MCMXCIV • Small Batch Ayurveda
-        </p>
-      </div>
-
-      {/* Floating element */}
+      {/* Floating scroll indicator */}
       <motion.div
-        animate={{ y: [0, -20, 0] }}
-        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-20 left-1/2 -translate-x-1/2 md:left-20 md:translate-x-0 flex flex-col items-center gap-4 text-heritage-green/40"
+        animate={{ y: [0, -15, 0] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-heritage-green/30"
       >
-        <div className="w-[1px] h-16 bg-gradient-to-b from-heritage-green/40 to-transparent"></div>
+        <div className="w-[1px] h-12 bg-gradient-to-b from-heritage-green/30 to-transparent"></div>
         <span className="text-[9px] uppercase font-bold tracking-widest vertical-text">Scroll</span>
       </motion.div>
     </section>
@@ -534,9 +914,6 @@ export default function App() {
                 Our Curated <br /> <span className="serif-italic text-rich-copper">Products.</span>
               </h2>
             </div>
-            <p className="text-lg text-heritage-green/40 font-serif italic max-w-xs text-right hidden md:block">
-              Each vessel is numbered and dated, reflecting the harvest season.
-            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-12 gap-y-24">
