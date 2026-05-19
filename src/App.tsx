@@ -828,42 +828,21 @@ const Craftsmanship = () => {
 };
 
 const Testimonials = ({ isLowPower }: { isLowPower: boolean }) => {
-  const textReviews = [
-    { text: "The Natural Radiance Oil is unlike anything I've tried. My skin feels like it's finally breathing.", author: "Elena V.", role: "Wellness Architect" },
-    { text: "You can smell the authenticity. This isn't just skincare; it's a ritual of grounding.", author: "Sarah M.", role: "Yoga Practitioner" }
-  ];
-
   const reviewImages = [
     review1, review2, review3, review4, review5, review6, review7, review8
   ];
 
   return (
-    <section className="py-40 bg-cream-base border-y border-heritage-green/5 overflow-hidden">
+    <section className="py-32 bg-cream-base border-y border-heritage-green/5 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-24">
-          <span className="luxury-label">Whispers from the Collective</span>
-        </div>
-
-        {/* Text Testimonials */}
-        <div className="max-w-5xl mx-auto space-y-32 text-center mb-32">
-          {textReviews.map((rev, i) => (
-            <motion.div
-              key={i}
-              initial={isLowPower ? { opacity: 1 } : { opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={isLowPower ? { duration: 0 } : { duration: 0.8 }}
-              className="space-y-10"
-            >
-              <p className="text-3xl md:text-5xl font-serif italic text-heritage-green leading-snug">
-                "{rev.text}"
-              </p>
-              <div className="space-y-2">
-                <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-rich-copper">{rev.author}</p>
-                <p className="text-[9px] uppercase tracking-[0.2em] text-heritage-green/40">{rev.role}</p>
-              </div>
-            </motion.div>
-          ))}
+        <div className="text-center mb-20 space-y-6">
+          <span className="luxury-label">Loved by the collective</span>
+          <h2 className="text-4xl md:text-6xl font-light text-heritage-green">
+            Real stories, <span className="serif-italic text-rich-copper">real glow.</span>
+          </h2>
+          <p className="text-heritage-green/60 max-w-2xl mx-auto font-light leading-relaxed">
+            Discover how our handcrafted, plant-based essentials are transforming skin and rituals across our community.
+          </p>
         </div>
 
         {/* Visual Testimonials Grid */}
