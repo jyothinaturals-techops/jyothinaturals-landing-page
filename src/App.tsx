@@ -190,7 +190,14 @@ const PRODUCTS: Product[] = [
 ];
 
 function usePerformanceMode() {
-  const [isLowPower, setIsLowPower] = useState(false);
+  const [isLowPower, setIsLowPower] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const isMobileScreen = window.innerWidth < 1024;
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+      (navigator.userAgent.includes('Macintosh') && navigator.maxTouchPoints > 1);
+    return hasTouch || isMobileScreen || isIOS;
+  });
 
   useEffect(() => {
     const checkPerformanceMode = () => {
@@ -202,7 +209,6 @@ function usePerformanceMode() {
       setIsLowPower(hasTouch || isMobileScreen || isIOS);
     };
 
-    checkPerformanceMode();
     window.addEventListener('resize', checkPerformanceMode);
     return () => window.removeEventListener('resize', checkPerformanceMode);
   }, []);
@@ -281,7 +287,7 @@ const ProductCard = ({ product, index, onOpen, isLowPower }: { product: Product;
   return (
     <motion.div
       initial={isLowPower ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }}
-      whileInView={isLowPower ? {} : { opacity: 1, y: 0 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={isLowPower ? { duration: 0 } : { duration: 0.8, delay: (index % 3) * 0.1 }}
       className="product-card group"
@@ -352,8 +358,12 @@ const ProductCard = ({ product, index, onOpen, isLowPower }: { product: Product;
 
 const Hero = ({ isLowPower }: { isLowPower: boolean }) => {
   const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 500], [0, 80]);
-  const opacity = useTransform(scrollY, [0, 400], [1, 0]);
+  // Disable parallax on mobile/low-power to prevent scroll jank
+  const yRaw = useTransform(scrollY, [0, 500], [0, 80]);
+  const opacityRaw = useTransform(scrollY, [0, 400], [1, 0]);
+  // Only use MotionValues on desktop to avoid scroll listeners on mobile
+  const y = isLowPower ? undefined : yRaw;
+  const opacity = isLowPower ? undefined : opacityRaw;
 
   const [activeIdx, setActiveIdx] = useState(0);
   const [isAutoplay, setIsAutoplay] = useState(true);
@@ -423,14 +433,16 @@ const Hero = ({ isLowPower }: { isLowPower: boolean }) => {
 
   return (
     <section
-      onMouseMove={handleMouseMove}
+      onMouseMove={isLowPower ? undefined : handleMouseMove}
       className="relative min-h-screen bg-cream-base flex items-center justify-center py-20 md:py-28 overflow-hidden select-none"
+      style={{ willChange: 'transform' }}
     >
-      <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+      <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
         {isLowPower ? (
+          // No blur on mobile — blur filters force full-section GPU repaints during scroll
           <div
             style={{ backgroundColor: activeProduct.color }}
-            className="absolute -top-[15%] -left-[10%] w-[55%] h-[55%] rounded-full opacity-[0.05] blur-[100px] transition-colors duration-1000"
+            className="absolute -top-[15%] -left-[10%] w-[55%] h-[55%] rounded-full opacity-[0.07]"
           />
         ) : (
           <>
@@ -447,7 +459,7 @@ const Hero = ({ isLowPower }: { isLowPower: boolean }) => {
                 repeatType: "mirror",
                 ease: "easeInOut",
               }}
-              className="absolute -top-[15%] -left-[10%] w-[55%] h-[55%] rounded-full opacity-[0.08] blur-[130px] transition-colors duration-1000"
+              className="absolute -top-[15%] -left-[10%] w-[55%] h-[55%] rounded-full opacity-[0.08] blur-[130px]"
             />
             <motion.div
               animate={{
@@ -503,7 +515,7 @@ const Hero = ({ isLowPower }: { isLowPower: boolean }) => {
 
             <div className="relative w-full aspect-square max-w-[320px] sm:max-w-[420px] md:max-w-[480px] mx-auto flex items-center justify-center">
               <motion.div
-                style={{ y: isLowPower ? 0 : y }}
+                style={isLowPower ? {} : { y }}
                 className="absolute w-full h-full flex items-center justify-center pointer-events-none"
               >
                 <motion.div
@@ -594,7 +606,7 @@ const Hero = ({ isLowPower }: { isLowPower: boolean }) => {
                       <img
                         src={activeProduct.image}
                         alt={activeProduct.name}
-                        className="max-w-full max-h-[85%] object-contain filter drop-shadow-[0_20px_40px_rgba(27,48,34,0.12)] select-none pointer-events-none rounded-3xl"
+                        className={`max-w-full max-h-[85%] object-contain select-none pointer-events-none rounded-3xl${isLowPower ? '' : ' filter drop-shadow-[0_20px_40px_rgba(27,48,34,0.12)]'}`}
                       />
                     </motion.div>
                   </motion.div>
@@ -691,9 +703,9 @@ const Hero = ({ isLowPower }: { isLowPower: boolean }) => {
           {/* Right Column: Original Branding & Copy */}
           <div className="col-span-1 lg:col-span-6 flex flex-col justify-center order-1 lg:order-2">
             <motion.div
-              style={{ opacity: isLowPower ? 1 : opacity }}
+              style={isLowPower ? {} : { opacity }}
               initial={isLowPower ? { opacity: 1, y: 0 } : { opacity: 0, y: 25 }}
-              animate={isLowPower ? { opacity: 1, y: 0 } : { opacity: 1, y: 0 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={isLowPower ? { duration: 0 } : { duration: 1, ease: "easeOut" }}
               className="max-w-xl md:max-w-2xl text-left"
             >
@@ -741,8 +753,8 @@ const Hero = ({ isLowPower }: { isLowPower: boolean }) => {
 
       {/* Floating scroll indicator */}
       <motion.div
-        animate={{ y: [0, -15, 0] }}
-        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+        animate={isLowPower ? {} : { y: [0, -15, 0] }}
+        transition={isLowPower ? {} : { duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
         className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 text-heritage-green/30"
       >
         <div className="w-[1px] h-12 bg-gradient-to-b from-heritage-green/30 to-transparent"></div>
@@ -822,7 +834,7 @@ const Testimonials = ({ isLowPower }: { isLowPower: boolean }) => {
             <motion.div
               key={i}
               initial={isLowPower ? { opacity: 1 } : { opacity: 0 }}
-              whileInView={isLowPower ? {} : { opacity: 1 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={isLowPower ? { duration: 0 } : { duration: 0.8 }}
               className="space-y-10"

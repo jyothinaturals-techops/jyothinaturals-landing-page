@@ -131,7 +131,39 @@ h1, h2, h3, h4 {
   @apply bg-transparent;
 }
 
+
 .custom-scrollbar::-webkit-scrollbar-thumb {
   @apply bg-heritage-green/10 rounded-full hover:bg-heritage-green/30;
 }
 
+/* =========================================================
+   MOBILE PERFORMANCE OVERRIDES
+   backdrop-filter and filter:blur force GPU compositing of
+   the entire stacking context on every scroll frame.
+   Remove them on touch devices for smooth scrolling.
+   ========================================================= */
+@media (hover: none) and (pointer: coarse) {
+  .glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: rgba(255, 255, 255, 0.92);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+
+  .glass-dark {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: rgba(27, 48, 34, 0.08);
+  }
+
+  .nav-glass {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background-color: rgba(253, 251, 247, 0.97);
+  }
+
+  .text-stroke {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
