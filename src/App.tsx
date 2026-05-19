@@ -29,6 +29,14 @@ import nalpamaradhiOil from '@/assets/nalpamaradhi-oil.webp';
 import logoText from '@/assets/logo_text.webp';
 import brandLogo from '@/assets/logo.webp';
 import logoTextTransparent from '@/assets/logo_text_transparent.webp';
+import review1 from '@/assets/reviews/1.webp';
+import review2 from '@/assets/reviews/2.webp';
+import review3 from '@/assets/reviews/3.webp';
+import review4 from '@/assets/reviews/4.webp';
+import review5 from '@/assets/reviews/5.webp';
+import review6 from '@/assets/reviews/6.webp';
+import review7 from '@/assets/reviews/7.webp';
+import review8 from '@/assets/reviews/8.webp';
 
 interface ProductSize {
   size: string;
@@ -820,17 +828,25 @@ const Craftsmanship = () => {
 };
 
 const Testimonials = ({ isLowPower }: { isLowPower: boolean }) => {
-  const reviews = [
+  const textReviews = [
     { text: "The Natural Radiance Oil is unlike anything I've tried. My skin feels like it's finally breathing.", author: "Elena V.", role: "Wellness Architect" },
     { text: "You can smell the authenticity. This isn't just skincare; it's a ritual of grounding.", author: "Sarah M.", role: "Yoga Practitioner" }
   ];
 
+  const reviewImages = [
+    review1, review2, review3, review4, review5, review6, review7, review8
+  ];
+
   return (
-    <section className="py-40 bg-cream-base border-y border-heritage-green/5">
-      <div className="max-w-5xl mx-auto px-6 text-center">
-        <span className="luxury-label">Whispers from the Collective</span>
-        <div className="mt-20 space-y-32">
-          {reviews.map((rev, i) => (
+    <section className="py-40 bg-cream-base border-y border-heritage-green/5 overflow-hidden">
+      <div className="max-w-7xl mx-auto px-6">
+        <div className="text-center mb-24">
+          <span className="luxury-label">Whispers from the Collective</span>
+        </div>
+
+        {/* Text Testimonials */}
+        <div className="max-w-5xl mx-auto space-y-32 text-center mb-32">
+          {textReviews.map((rev, i) => (
             <motion.div
               key={i}
               initial={isLowPower ? { opacity: 1 } : { opacity: 0 }}
@@ -846,6 +862,22 @@ const Testimonials = ({ isLowPower }: { isLowPower: boolean }) => {
                 <p className="text-[11px] font-bold uppercase tracking-[0.3em] text-rich-copper">{rev.author}</p>
                 <p className="text-[9px] uppercase tracking-[0.2em] text-heritage-green/40">{rev.role}</p>
               </div>
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Visual Testimonials Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8 items-start">
+          {reviewImages.map((img, i) => (
+            <motion.div
+              key={i}
+              initial={isLowPower ? { opacity: 1 } : { opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={isLowPower ? { duration: 0 } : { duration: 0.6, delay: (i % 4) * 0.1 }}
+              className={`relative overflow-hidden rounded-2xl md:rounded-[2rem] shadow-[0_10px_30px_rgba(27,48,34,0.06)] bg-white ${i % 2 !== 0 ? 'mt-8 md:mt-16' : ''}`}
+            >
+              <img src={img} alt={`Customer review ${i + 1}`} className="w-full h-auto object-cover hover:scale-105 transition-transform duration-700 ease-in-out" />
             </motion.div>
           ))}
         </div>
