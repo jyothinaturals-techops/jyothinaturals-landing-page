@@ -203,10 +203,10 @@ const Navbar = () => {
     <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-700 ${scrolled ? 'py-1 md:py-0 nav-glass shadow-lg' : 'py-3 md:py-2 bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-6 md:px-12 flex justify-between items-center">
         <a href="#" className="flex items-center">
-          <img 
-            src={logoTextTransparent} 
-            alt="Jyothi Naturals" 
-            className="h-14 md:h-20 w-auto object-contain hover:opacity-90 transition-opacity" 
+          <img
+            src={logoTextTransparent}
+            alt="Jyothi Naturals"
+            className="h-14 md:h-20 w-auto object-contain hover:opacity-90 transition-opacity"
           />
         </a>
 
@@ -725,21 +725,21 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 pb-20 border-b border-white/5">
             <div className="lg:col-span-2 space-y-12">
               <a href="#" className="inline-block">
-                <img 
-                  src={logoText} 
-                  alt="Jyothi Naturals" 
-                  className="h-12 md:h-16 object-contain hover:opacity-80 transition-opacity" 
-                  style={{ filter: 'invert(1) grayscale(1) brightness(3)', mixBlendMode: 'screen' }} 
+                <img
+                  src={logoText}
+                  alt="Jyothi Naturals"
+                  className="h-12 md:h-16 object-contain hover:opacity-80 transition-opacity"
+                  style={{ filter: 'invert(1) grayscale(1) brightness(3)', mixBlendMode: 'screen' }}
                 />
               </a>
               <p className="max-w-sm text-lg font-serif italic text-white/50 leading-relaxed">
-                Homemade skincare made with love & care. <br />
+                Homemade skincare crafted with love & care. <br />
                 SKIN KNOWS NO GENDER
               </p>
               <div className="flex gap-10">
-                <a 
-                  href="https://www.instagram.com/jyothinaturals?igsh=eDRhZ2YyMmlrZm1j" 
-                  target="_blank" 
+                <a
+                  href="https://www.instagram.com/jyothinaturals?igsh=eDRhZ2YyMmlrZm1j"
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="text-white/40 hover:text-white transition-colors"
                 >
