@@ -606,7 +606,7 @@ const Hero = ({ isLowPower }: { isLowPower: boolean }) => {
                       <img
                         src={activeProduct.image}
                         alt={activeProduct.name}
-                        className={`max-w-full max-h-[85%] object-contain select-none pointer-events-none rounded-3xl${isLowPower ? '' : ' filter drop-shadow-[0_20px_40px_rgba(27,48,34,0.12)]'}`}
+                        className={`w-full aspect-square object-cover select-none pointer-events-none rounded-[2.5rem] ${isLowPower ? '' : 'filter drop-shadow-[0_20px_40px_rgba(27,48,34,0.12)]'}`}
                       />
                     </motion.div>
                   </motion.div>
