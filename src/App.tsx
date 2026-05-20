@@ -224,6 +224,229 @@ function usePerformanceMode() {
   return isLowPower;
 }
 
+const NAV_ITEMS = [
+  { label: 'Products', href: '#products' },
+  { label: 'Process', href: '#process' },
+  { label: 'Reviews', href: '#reviews' },
+  { label: 'Our Story', href: '#about' }
+];
+
+interface LegalPolicyModalProps {
+  activePolicy: 'privacy' | 'terms' | null;
+  onClose: () => void;
+}
+
+const LegalPolicyModal = ({ activePolicy, onClose }: LegalPolicyModalProps) => {
+  if (!activePolicy) return null;
+
+  const isPrivacy = activePolicy === 'privacy';
+
+  return (
+    <AnimatePresence>
+      {activePolicy && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-12"
+        >
+          <div className="absolute inset-0 bg-heritage-dark/95 backdrop-blur-sm" onClick={onClose}></div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="relative w-full max-w-4xl bg-cream-base overflow-hidden flex flex-col h-full max-h-[85vh] shadow-2xl rounded-2xl border border-heritage-green/10"
+          >
+            {/* Header */}
+            <div className="p-6 md:p-10 border-b border-heritage-green/10 flex justify-between items-center bg-cream-base sticky top-0 z-10">
+              <div>
+                <span className="luxury-label !mb-1">Jyothi Naturals</span>
+                <h2 className="text-3xl md:text-4xl font-light text-heritage-green">
+                  {isPrivacy ? 'Privacy Policy' : 'Terms of Service'}
+                </h2>
+              </div>
+              <button
+                onClick={onClose}
+                className="text-heritage-green hover:rotate-90 transition-transform p-2 bg-white/50 border border-heritage-green/10 backdrop-blur cursor-pointer rounded-full"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-8 md:p-12 overflow-y-auto custom-scrollbar flex-1 bg-cream-base text-ink-deep/80 text-sm md:text-base leading-relaxed space-y-8 font-sans">
+              {isPrivacy ? (
+                <div className="space-y-6">
+                  <p className="font-serif italic text-lg text-ink-deep/60">
+                    Last updated: May 20, 2026
+                  </p>
+                  <p>
+                    Welcome to Jyothi Naturals. We are deeply committed to protecting your personal privacy. Because we value transparency, we want to share exactly how your information is handled when you browse our website and order our handcrafted skincare products.
+                  </p>
+                  
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">1. Information We Collect</h3>
+                    <p>
+                      Our website is designed to be simple, transparent, and secure. 
+                    </p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li><strong>No Automatic Data Collection:</strong> We do not automatically track, store, or profile your personal data or browsing behavior, nor do we require you to register an account.</li>
+                      <li><strong>Conversational Ordering Data:</strong> Because all orders are placed and processed manually through WhatsApp, the only personal data we receive is what you choose to share with us during our conversation (such as your name, WhatsApp phone number, shipping/delivery address, and product preferences).</li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">2. How We Use Your Information</h3>
+                    <p>
+                      Any information you provide manually during your order checkout or inquiry is used exclusively to:
+                    </p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>Communicate with you regarding product questions, availability, and manual order confirmations.</li>
+                      <li>Securely prepare and ship your physical packages to your delivery address.</li>
+                      <li>Send you updates on product restocks or new launches <em>only</em> if you have explicitly requested us to notify you about coming soon items.</li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">3. Data Security & Integrity</h3>
+                    <p>
+                      Since Jyothi Naturals operates as a local, handcrafted small-batch kitchen brand, we do not store your data in complex online or third-party cloud databases. 
+                    </p>
+                    <p>
+                      Your delivery coordinates and chat history are held securely on password-protected personal devices and within secure WhatsApp Business communication channels. They are accessible only to our founder Sujatha and authorized family members assisting in order fulfillment.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">4. Third-Party Sharing</h3>
+                    <p>
+                      We never sell, rent, trade, or distribute your personal details to advertising agencies or outside parties. The only sharing that occurs is strictly operational: we share your name, delivery address, and phone number with our trusted local and domestic courier partners solely to get your package safely to your doorstep.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">5. Cookies and Analytics</h3>
+                    <p>
+                      This website is a clean, minimal landing page. We do not place cookies or track your browsing activity across the web.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">6. Your Rights & Control</h3>
+                    <p>
+                      You are in complete control of your data. At any point, you can ask us to delete your delivery address, contact information, or chat history from our records. To do so, simply send us a message on WhatsApp (+91 97314 14523) and we will immediately accommodate your request.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">7. Policy Changes</h3>
+                    <p>
+                      As Jyothi Naturals grows and registers formally, this policy may be updated to reflect new features (such as automated checkouts or database integration). Any updates will be posted directly on this page.
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <p className="font-serif italic text-lg text-ink-deep/60">
+                    Last updated: May 20, 2026
+                  </p>
+                  <p>
+                    Welcome to the Jyothi Naturals landing page. By accessing this website and purchasing our handcrafted products, you agree to comply with and be bound by the following Terms of Service. Please review these terms carefully before placing an order.
+                  </p>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">1. Nature of the Brand & Products</h3>
+                    <p>
+                      Jyothi Naturals products are entirely handcrafted in small batches by Sujatha, preserving traditional recipes and organic knowledge.
+                    </p>
+                    <p>
+                      <strong>Small-Batch Consistency:</strong> Because we use wholesome, natural, and raw botanical ingredients, minor variations in color, aroma, consistency, or texture can naturally occur from batch to batch. These variations are normal and do not affect the quality or efficacy of the products.
+                    </p>
+                    <p>
+                      <strong>Temperature Sensitivity:</strong> Our pure Ayurvedic and organic hair/face oils (such as the Herbal Hair Oil or Nalpamaradhi Body Polishing Oil) contain pure botanical oils that may partially or fully solidify in cooler climates. If this happens, gently warm the bottle by half-immersing it in warm water to restore its liquid consistency.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">2. Crucial Safety & Patch Test Mandate</h3>
+                    <div className="bg-rich-copper/5 border-l-2 border-rich-copper p-4 my-2 text-ink-deep/90 rounded-r-md">
+                      <p className="font-bold text-rich-copper uppercase text-xs tracking-wider mb-1">Warning & Safe Use Mandate</p>
+                      <p className="text-sm">
+                        All products are for external, cosmetic use only. Although crafted with organic and clean plant-based ingredients, natural ingredients can still trigger sensitivity or allergic reactions in individual skin types.
+                      </p>
+                      <p className="text-sm font-semibold mt-2">
+                        A PATCH TEST IS MANDATORY BEFORE FIRST FULL APPLICATION. 
+                      </p>
+                      <p className="text-sm mt-1">
+                        Apply 1-2 drops or a small amount of the mixed paste on a clean, discrete patch of skin (such as the inner elbow or jawline) and wait 24 to 48 hours to ensure no irritation, redness, or burning occurs. If any irritation is experienced, discontinue use immediately.
+                      </p>
+                    </div>
+                    <p>
+                      <strong>No Medical Claims:</strong> Our products are formulated to support natural skin and hair health, but are not medical treatments or drugs. They are not intended to diagnose, treat, prevent, or cure any clinical skin condition, hair loss pathology, or medical disease. Consult a licensed dermatologist or medical practitioner for professional medical advice.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">3. Manual Ordering & Checkout</h3>
+                    <p>
+                      <strong>WhatsApp Conversational Checkout:</strong> Jyothi Naturals does not process automated checkouts, credit card payments, or online payment cycles directly on this landing page. 
+                    </p>
+                    <p>
+                      To place an order:
+                    </p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>You click our WhatsApp triggers, which generate a manual order draft message.</li>
+                      <li>We discuss and confirm product size, weight, quantity, and current availability via WhatsApp.</li>
+                      <li>We manually coordinate payment via direct bank transfer, UPI (Unified Payments Interface), or other approved digital channels in India.</li>
+                      <li>Shipping charges are calculated and shared based on your location.</li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">4. Intellectual Property</h3>
+                    <p>
+                      All text, logos, custom images, brand designs, and copy displayed on this website are the intellectual property of Jyothi Naturals and are protected under copyright and trademark laws. You may not copy, replicate, or use our digital assets for commercial purposes without our express written consent.
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">5. Limitation of Liability</h3>
+                    <p>
+                      To the maximum extent permitted by applicable law, Jyothi Naturals, its founder Sujatha, and its operators shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from:
+                    </p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>Your use of, or inability to use, our website or products.</li>
+                      <li>Any allergic reactions or skin sensitivity, provided we have clearly displayed warnings and mandatory patch test requirements.</li>
+                      <li>Any shipping delays or delivery failures caused by courier agencies or force majeure events.</li>
+                    </ul>
+                  </div>
+
+                  <div className="space-y-3">
+                    <h3 className="text-xl font-light text-heritage-green tracking-wide border-b border-heritage-green/15 pb-2">6. Governing Law</h3>
+                    <p>
+                      These Terms and any purchase agreements confirmed via WhatsApp are governed by and construed in accordance with the laws of India, and any disputes will be subject to the exclusive jurisdiction of the courts in Karnataka, India.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="p-6 md:p-8 bg-cream-base border-t border-heritage-green/10 flex justify-end">
+              <button
+                onClick={onClose}
+                className="btn-primary !py-2.5 !px-8 cursor-pointer"
+              >
+                I Understand
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+};
+
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -246,9 +469,9 @@ const Navbar = () => {
         </a>
 
         <div className="hidden md:flex gap-10">
-          {['Products', 'Heritage', 'Process', 'Contact'].map((item) => (
-            <a key={item} href={`#${item.toLowerCase()}`} className="text-[11px] font-bold uppercase tracking-[0.3em] text-heritage-green/60 hover:text-heritage-green hover:scale-105 transition-all duration-300 relative group">
-              {item}
+          {NAV_ITEMS.map((item) => (
+            <a key={item.label} href={item.href} className="text-[11px] font-bold uppercase tracking-[0.3em] text-heritage-green/60 hover:text-heritage-green hover:scale-105 transition-all duration-300 relative group">
+              {item.label}
               <span className="absolute -bottom-1 left-0 w-0 h-[2px] bg-heritage-green transition-all duration-500 group-hover:w-full"></span>
             </a>
           ))}
@@ -276,9 +499,9 @@ const Navbar = () => {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden absolute top-full left-0 w-full bg-cream-base border-b border-heritage-green/5 shadow-2xl p-10 flex flex-col gap-8"
           >
-            {['Products', 'Heritage', 'Process', 'Contact'].map((item) => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="text-sm font-bold uppercase tracking-widest text-center" onClick={() => setIsOpen(false)}>
-                {item}
+            {NAV_ITEMS.map((item) => (
+              <a key={item.label} href={item.href} className="text-sm font-bold uppercase tracking-widest text-center" onClick={() => setIsOpen(false)}>
+                {item.label}
               </a>
             ))}
           </motion.div>
@@ -833,7 +1056,7 @@ const Testimonials = ({ isLowPower }: { isLowPower: boolean }) => {
   ];
 
   return (
-    <section className="py-32 bg-cream-base border-y border-heritage-green/5 overflow-hidden">
+    <section id="reviews" className="py-32 bg-cream-base border-y border-heritage-green/5 overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
         <div className="text-center mb-20 space-y-6">
           <span className="luxury-label">Loved by the collective</span>
@@ -870,6 +1093,7 @@ export default function App() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
+  const [activePolicy, setActivePolicy] = useState<'privacy' | 'terms' | null>(null);
 
   useEffect(() => {
     if (selectedProduct && selectedProduct.sizes && selectedProduct.sizes.length > 0) {
@@ -1036,11 +1260,6 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="space-y-2 pt-2 border-t border-heritage-green/5">
-                    <p className="text-[10px] uppercase font-bold tracking-widest text-heritage-green/30">CONSCIOUS CARE</p>
-                    <p className="text-xs text-ink-deep/40 italic leading-relaxed">{selectedProduct.warning}</p>
-                  </div>
-
                   <div className="pt-4">
                     <a
                       href={getWhatsAppUrl()}
@@ -1063,7 +1282,7 @@ export default function App() {
 
       <Testimonials isLowPower={isLowPower} />
 
-      <section id="heritage" className="py-40 bg-white overflow-hidden">
+      <section id="about" className="py-40 bg-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex flex-col md:flex-row items-center gap-20">
           <div className="w-full md:w-1/2 relative">
             <div className="aspect-[4/5] bg-cream-base overflow-hidden rounded-2xl">
@@ -1095,16 +1314,15 @@ export default function App() {
         </div>
       </section>
 
-      <footer id="contact" className="bg-[#122117] py-32 text-white/40">
+      <footer className="bg-[#122117] py-32 text-white/40">
         <div className="max-w-7xl mx-auto px-6 md:px-12">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-20 pb-20 border-b border-white/5">
             <div className="lg:col-span-2 space-y-12">
               <a href="#" className="inline-block">
                 <img
-                  src={logoText}
+                  src={logoTextTransparent}
                   alt="Jyothi Naturals"
-                  className="h-12 md:h-16 object-contain hover:opacity-80 transition-opacity"
-                  style={{ filter: 'invert(1) grayscale(1) brightness(3)', mixBlendMode: 'screen' }}
+                  className="h-14 md:h-20 w-auto object-contain hover:opacity-90 transition-opacity"
                 />
               </a>
               <p className="max-w-sm text-lg font-serif italic text-white/50 leading-relaxed">
@@ -1124,17 +1342,34 @@ export default function App() {
             </div>
 
             <div className="space-y-10">
-              <p className="text-[10px] uppercase font-bold tracking-widest text-white">Shop</p>
+              <p className="text-[10px] uppercase font-bold tracking-widest text-white">Explore</p>
               <ul className="space-y-6 text-[10px] tracking-[0.2em] font-medium">
                 <li><a href="#products" className="hover:text-white transition-colors uppercase">Products</a></li>
+                <li><a href="#process" className="hover:text-white transition-colors uppercase">Our Process</a></li>
+                <li><a href="#reviews" className="hover:text-white transition-colors uppercase">Reviews</a></li>
+                <li><a href="#about" className="hover:text-white transition-colors uppercase">Our Story</a></li>
               </ul>
             </div>
 
             <div className="space-y-10">
-              <p className="text-[10px] uppercase font-bold tracking-widest text-white">About</p>
+              <p className="text-[10px] uppercase font-bold tracking-widest text-white">Support & Legal</p>
               <ul className="space-y-6 text-[10px] tracking-[0.2em] font-medium">
-                <li><a href="#process" className="hover:text-white transition-colors uppercase">Process</a></li>
-                <li><a href="#heritage" className="hover:text-white transition-colors uppercase">Heritage</a></li>
+                <li>
+                  <button
+                    onClick={() => setActivePolicy('privacy')}
+                    className="hover:text-white transition-colors uppercase cursor-pointer text-left focus:outline-none"
+                  >
+                    Privacy Policy
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={() => setActivePolicy('terms')}
+                    className="hover:text-white transition-colors uppercase cursor-pointer text-left focus:outline-none"
+                  >
+                    Terms of Service
+                  </button>
+                </li>
               </ul>
             </div>
           </div>
@@ -1142,8 +1377,18 @@ export default function App() {
           <div className="pt-20 flex flex-col md:flex-row justify-between items-center gap-10 text-[10px] uppercase font-medium tracking-[0.3em]">
             <p>© 2026 Jyothi Naturals. Intention in every bottle.</p>
             <div className="flex gap-12 opacity-60">
-              <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+              <button
+                onClick={() => setActivePolicy('privacy')}
+                className="hover:text-white transition-colors cursor-pointer text-left focus:outline-none"
+              >
+                Privacy Policy
+              </button>
+              <button
+                onClick={() => setActivePolicy('terms')}
+                className="hover:text-white transition-colors cursor-pointer text-left focus:outline-none"
+              >
+                Terms of Service
+              </button>
             </div>
           </div>
         </div>
@@ -1158,6 +1403,8 @@ export default function App() {
           <MessageCircle className="w-6 h-6 relative z-10" />
         </a>
       </div>
+
+      <LegalPolicyModal activePolicy={activePolicy} onClose={() => setActivePolicy(null)} />
     </div>
   );
 }
